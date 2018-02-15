@@ -1,0 +1,150 @@
+/*
+ * jQuery FlexSlider v2.6.0
+ * http://www.woothemes.com/flexslider/
+ *
+ * Copyright 2012 WooThemes
+ * Free to use under the GPLv2 and later license.
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Contributing author: Tyler Smith (@mbmufffin)
+ *
+ */
+/* ====================================================================================================================
+ * FONT-FACE
+ * ====================================================================================================================*/
+
+/* ====================================================================================================================
+ * RESETS
+ * ====================================================================================================================*/
+.flex-container a:hover,
+.flex-slider a:hover {
+  outline: none;
+}
+
+.slides,
+.slides > li,
+.flex-control-nav,
+.flex-direction-nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flex-pauseplay span {
+  text-transform: capitalize;
+}
+
+/* ====================================================================================================================
+ * BASE STYLES
+ * ====================================================================================================================*/
+.flexslider {
+  margin: 0;
+  padding: 0;
+  position: relative;
+
+  ul {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+.flexslider .slides > li {
+  display: none;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  margin-bottom: 0 !important;
+}
+
+.node-flowback-support .flexslider .slides > li {
+  max-height: 350px;
+}
+
+.node-flowback-drill-out .flexslider .slides > li {
+  max-height: 310px;
+}
+
+.node-well-testing .flexslider .slides > li {
+  max-height: 340px;
+}
+
+.flexslider .slides img {
+  width: 100%;
+  display: block;
+}
+
+.flexslider .slides:after {
+  content: "\0020";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+html[xmlns] .flexslider .slides {
+  display: block;
+}
+
+* html .flexslider .slides {
+  height: 1%;
+}
+
+.no-js .flexslider .slides > li:first-child {
+  display: block;
+}
+
+.flexslider .flex-prev, .flexslider .flex-next {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  background: #8b8b8b;
+
+  &:before {
+    @include pseudo-block($top: 50%);
+    @include oneline-sprite-box($icons, sldier-arrow);
+  }
+}
+
+.flexslider .flex-prev {
+  left: 0;
+
+  &:before {
+    @include transform(translateY(-50%));
+    left: 8px;
+  }
+}
+
+.flexslider .flex-next {
+  right: 0;
+
+  &:before {
+    @include transform(translateY(-50%) rotate(180deg));
+    right: 8px;
+  }
+}
+
+.flex-control-nav {
+  position: absolute;
+  left: 50%;
+  @include transform(translateX(-50%));
+}
+
+.flex-control-nav li {
+  display: inline-block;
+  margin: 0 3px;
+}
+
+.flex-control-nav li a {
+  width: 12px;
+  height: 12px;
+  background: #cdcccc;
+  @include border-radius(50%);
+  @include text-hide();
+  display: block;
+  outline: none;
+
+  &.flex-active {
+    background: #1087dd;
+  }
+}

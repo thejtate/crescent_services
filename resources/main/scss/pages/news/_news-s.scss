@@ -1,0 +1,128 @@
+.page-news {
+
+  h5 {
+    margin: 0 0 50px 0;
+    border-bottom: 1px solid #c0c0c0;
+    padding-bottom: 40px;
+    font-size: 36px;
+    font-family: museo-300;
+    text-align: center;
+    color: #818181;
+    text-transform: uppercase;
+  }
+
+  img{
+    width: 100%;
+    height: auto;
+  }
+
+  .block-system {
+
+    .content {
+
+      .content {
+        margin: 0;
+      }
+    }
+  }
+
+  .content-wrapper {
+    padding: 60px 0 0 0;
+
+    &.with-sidebar {
+
+      .sidebar {
+        display: none;
+      }
+
+      .block-system {
+        width: 100%;
+      }
+    }
+  }
+
+  .blog-wrapper {
+    @include clearfix();
+
+    .blog-item {
+      border-bottom: 2px solid #e2e2e2;
+      padding-bottom: 35px;
+      margin-bottom: 35px;
+    }
+
+    .date {
+      font-size: 12px;
+      font-family: $niks-bold;
+    }
+
+    h3 {
+      font-size: 16px;
+      margin: 12px 0 12px 0;
+      font-family: $museoslab-700;
+      text-transform: uppercase;
+
+      a {
+        color: #818181;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .sidebar {
+
+    h2 {
+      font-size: 24px;
+      text-transform: uppercase;
+      color: #818181;
+      border-bottom: 2px solid #e2e2e2;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+      font-family: $museoslab-500;
+    }
+
+    .block-views {
+      margin-bottom: 50px;
+    }
+
+    .view-content {
+
+      .views-summary, a {
+        color: #9c9c9b;
+        font-size: 14px;
+        font-family: $avenir-meidum;
+        text-decoration: none;
+      }
+    }
+
+    .block-fblog {
+
+      .fblog-archive-list {
+        margin: 0;
+        padding: 0;
+
+        li {
+          list-style: none;
+        }
+
+        a, .number {
+          text-decoration: none;
+          color: #9c9c9b;
+          font-size: 14px;
+        }
+
+        & > li {
+          list-style: none;
+
+          & > a {
+            font-family: $avenir-bold;
+            color: #707070;
+          }
+        }
+
+        ul {
+          padding: 0 0 0 25px;
+        }
+      }
+    }
+  }
+}

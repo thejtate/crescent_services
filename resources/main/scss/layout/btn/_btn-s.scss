@@ -1,0 +1,47 @@
+.btn-wrapp {
+  padding-top: 10px;
+
+  .submit-wrapper {
+    text-align: right;
+  }
+
+  .front & {
+    text-align: center;
+  }
+
+  &.with-arrow .btn {
+    padding: 10px 30px 10px 50px;
+
+    &:before {
+      @include pseudo-block($top: 50%, $left: 25px);
+      margin-top: -9px;
+      border-bottom: 9px solid transparent;
+      border-top: 9px solid transparent;
+      border-left: 13px solid #f6a704;
+      @include transition(all .3s);
+    }
+
+    &:hover:before {
+      left: 25px;
+    }
+  }
+
+  .btn, .form-submit {
+    position: relative;
+    display: inline-block;
+    font-size: 14px;
+    font-family: $niks-normal;
+    text-decoration: none;
+    background: #fff;
+    @include border-radius(7px);
+    color: #3c3c3c;
+    padding: 17px 40px 17px 40px;
+    border: 1px solid #d2d2d2;
+    @include box-shadow(inset 0 0 55px -4px #D6D6D6);
+    @include transition(all .3s);
+
+    &:hover {
+      @include opacity(0.7);
+    }
+  }
+}

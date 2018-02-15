@@ -1,0 +1,11 @@
+.content-wrapper {
+
+  &.with-sidebar {
+
+    .block-system {
+      width: 590px;
+      float: left;
+      margin-bottom: 90px;
+    }
+  }
+}

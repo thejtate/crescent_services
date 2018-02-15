@@ -1,0 +1,16 @@
+Index: sites/all/modules/contrib/smart_trim/smart_trim.module
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- sites/all/modules/contrib/smart_trim/smart_trim.module	(revision 6e8c3a387ed23a0079b500d678da0676073caeea)
++++ sites/all/modules/contrib/smart_trim/smart_trim.module	(revision )
+@@ -126,7 +126,7 @@
+         $uri = entity_uri($entity_type, $entity);
+         // But wait! Don't add a more link if the field ends in <!--break-->
+         if ($uri && $settings['more_link'] && strpos(strrev($output), strrev('<!--break-->')) !== 0) {
+-          $extension .= l(t('@more_text', array('@more_text' => $settings['more_text'])), $uri['path'], array('html' => TRUE, 'attributes' => array('class' => array('more-link'))));
++          $extension .= " " . l(t('@more_text', array('@more_text' => $settings['more_text'])), $uri['path'], array('html' => TRUE, 'attributes' => array('class' => array('more-link'))));
+         }
+ 
+         $output_appended = preg_replace('#^(.*)(\s?)(</[^>]+>)$#Us', '$1' . $extension . '$3', $output);

@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Crescent base functionality
+ */
+
+module_load_include("inc", "crescent_base", "includes/crescent_base.blocks");
+
+
+
+/**
+ * Implements hook_theme().
+ */
+function crescent_base_theme() {
+  $module_path = drupal_get_path('module', 'crescent_base');
+  $base = array(
+    'path' => $module_path . "/templates",
+  );
+
+  return array(
+    'crescent_base_enviro_edge_block' => $base + array(
+      'variables' => array(
+        'block' => NULL,
+      ),
+      'template' => 'blocks/crescent_base_enviro_edge_block',
+    ),
+  );
+}
+

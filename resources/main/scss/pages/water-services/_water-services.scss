@@ -1,0 +1,75 @@
+.page-water-services {
+
+  .quicktabs_main {
+
+    ul {
+      margin: 0 0 50px;
+      padding: 0;
+      font-size: 18px;
+      font-family: $avenir-bold;
+
+      li {
+        list-style: none;
+        margin-bottom: 40px;
+
+        span {
+          position: relative;
+          padding-left: 45px;
+        }
+      }
+    }
+
+    .quicktabs-tabpage:nth-child(2) {
+
+      h6 {
+        font-family: $avenir-regular;
+        text-transform: none;
+        color: #7d7d7d;
+        margin: 0 0 50px 0;
+      }
+
+      ul li span:before {
+        @include pseudo-block($left: 0, $top: -7px);
+        @include oneline-sprite-box($icons, icon-12);
+      }
+    }
+
+    .quicktabs-tabpage:nth-child(4) {
+
+      ul {
+        margin: 0 auto;
+
+        li {
+          margin-bottom: 20px;
+          text-align: left;
+
+          span {
+            display: block;
+            padding-left: 75px;
+
+            &:before {
+              @include pseudo-block($left: 0, $top: 5px);
+              @include oneline-sprite-box($icons, icon-13);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #quicktabs-tabpage-water_services-2, #quicktabs-tabpage-water_services-1 {
+
+    .text-inner {
+      text-align: center;
+    }
+  }
+
+  .img {
+    margin-top: 60px;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}

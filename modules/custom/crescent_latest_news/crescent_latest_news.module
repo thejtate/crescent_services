@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * @file
+ * Crescent base functionality
+ */
+
+module_load_include("inc", "crescent_latest_news", "includes/crescent_latest_news.blocks");
+
+define("CRESCENT_LATEST_NEWS_NODE_TYPE", "fblog_post");
+define("CRESCENT_LATEST_NEWS_NODE_DATE_FIELD", "field_fblog_date");
+define("CRESCENT_LATEST_NEWS_NODE_IMAGE_FIELD", "field_fblog_teaser_image");
+define("CRESCENT_LATEST_NEWS_NODE_TEASER_FIELD", "field_fblog_teaser");
+
+
+/**
+ * Implements hook_theme().
+ */
+function crescent_latest_news_theme() {
+  $module_path = drupal_get_path('module', 'crescent_latest_news');
+  $base = array(
+    'path' => $module_path . "/templates",
+  );
+
+  return array(
+    'crescent_latest_news_blocks' => $base + array(
+      'variables' => array(
+        'blocks' => NULL,
+      ),
+      'template' => 'blocks/crescent_latest_news_blocks',
+    ),
+    'crescent_latest_news_block' => $base + array(
+        'variables' => array(
+          'post_data' => NULL,
+        ),
+        'template' => 'blocks/crescent_latest_news_block',
+      ),
+  );
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function crescent_latest_news_menu() {
+  $items = array();
+
+  $items['crescent-latest-news'] = array(
+    'access arguments' => array('access content'),
+    'page callback' => 'crescent_latest_news_get_content',
+    'type' => MENU_CALLBACK,
+    'delivery callback' => 'drupal_json_output'
+  );
+
+  return $items;
+}
+
+
+/**
+ * Get last blog post.
+ * @return array
+ */
+function crescent_latest_news_get_content(){
+  $last_post = array(
+    'title' => "",
+    'date' => "",
+    'image_url'=> "",
+    'teaser' => "",
+    'body' => "",
+    'url' => ""
+  );
+
+  // get last blog post.
+  $query = db_select("field_data_" . CRESCENT_LATEST_NEWS_NODE_DATE_FIELD, "d");
+  $query->fields("d", array("entity_id"));
+  $query->condition("bundle", CRESCENT_LATEST_NEWS_NODE_TYPE);
+  $query->range(0,1);
+  $query->orderBy(CRESCENT_LATEST_NEWS_NODE_DATE_FIELD . "_value", "DESC");
+  $nid = $query->execute()->fetchField(0);
+
+  try {
+  $node_wrapper = entity_metadata_wrapper('node', $nid);
+    $last_post['title'] = $node_wrapper->title->value();
+    $last_post['date'] = $node_wrapper->{CRESCENT_LATEST_NEWS_NODE_DATE_FIELD}->value();
+    $image = $node_wrapper->{CRESCENT_LATEST_NEWS_NODE_IMAGE_FIELD}->value();
+    $image_url =  (isset($image['uri'])) ? file_create_url($image['uri']): "";
+    $last_post['image_url'] = $image_url;
+    $last_post['teaser'] = $node_wrapper->{CRESCENT_LATEST_NEWS_NODE_TEASER_FIELD}->value->value();
+    $last_post['body'] = $node_wrapper->body->value->value();
+    $last_post['url'] = url("node/" . $nid, array('absolute' => TRUE));
+  }
+  catch (EntityMetadataWrapperException $exc) {
+    watchdog(
+      'crescent_latest_news',
+      'See '  . __FUNCTION__ . '() <pre>' .  $exc->getTraceAsString() . '</pre>',
+      NULL, WATCHDOG_ERROR
+    );
+  }
+
+  return $last_post;
+}

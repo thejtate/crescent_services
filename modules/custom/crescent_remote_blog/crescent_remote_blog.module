@@ -1,0 +1,141 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Sergey Grigorenko (svipsa@gmail.com)
+ * Date: 07.09.15
+ * Time: 12:35
+ */
+
+
+define("CRESCENT_REMOTE_BLOG_TAGS", "crescent_remote_blog_tags");
+define("CRESCENT_REMOTE_BLOG_ENTITY_TYPE", "crbp");
+define("CRESCENT_REMOTE_BLOG_TABLE", "crbps");
+
+
+module_load_include("inc", "crescent_remote_blog", "includes/crescent_remote_blog.entity");
+module_load_include("inc", "crescent_remote_blog", "includes/crescent_remote_blog.core");
+module_load_include("inc", "crescent_remote_blog", "includes/crescent_remote_blog.clients");
+module_load_include("inc", "crescent_remote_blog", "includes/crescent_remote_blog.block");
+
+module_load_include("inc", "crescent_remote_blog", "includes/crescent_remote_blog.views");
+
+
+/**
+ * Implements hook_init().
+ */
+function crescent_remote_blog_init() {
+  $path = drupal_get_path("module", "crescent_remote_blog");
+  drupal_add_css($path . "/css/crescent_remote_blog.css");
+  drupal_add_js($path . "/js/crescent_remote_blog.js");
+}
+
+
+/**
+ * @param $entities
+ * @param $entity_type
+ */
+function crescent_remote_blog_remote_entity_process($entities, $entity_type) {
+  if ($entity_type == CRESCENT_REMOTE_BLOG_ENTITY_TYPE) {
+    foreach ($entities as $entity_id => $entity) {
+      // if removed
+
+      if (empty($entity->remote_id)) {
+        $eid = $entity_id;
+        // set entity removed
+        continue;
+      }
+
+// TAGS
+      $field_name = 'field_' . CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_tags';
+      $values = array(
+        'eid' => $entity_id,
+        $field_name => $entity->entity_data->tags,
+        'type' => $entity_type
+      );
+      $new_entity = entity_create($entity_type, $values);
+      $info = field_info_field($field_name);
+      $fields = array($info['id']);
+      field_sql_storage_field_storage_write($entity_type, $new_entity, 'update', $fields);
+
+
+// DATE
+      $date_field = array(LANGUAGE_NONE => array(0 => array('value' => $entity->entity_data->date)));
+      $field_name = 'field_' . CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_date';
+      $values = array(
+        'eid' => $entity_id,
+        $field_name => $date_field,
+        'type' => $entity_type
+      );
+      $new_entity = entity_create($entity_type, $values);
+      $info = field_info_field($field_name);
+      $fields = array($info['id']);
+      field_sql_storage_field_storage_write($entity_type, $new_entity, 'update', $fields);
+    }
+  }
+}
+
+
+/**
+ * Implements hook_cronapi().
+ */
+function crescent_remote_blog_cronapi($op, $job = NULL) {
+  $items['crescent_remote_blog_cron'] = array(
+    'description' => 'Update blog posts',
+    'rule' => '25 */1 * * *', // Every hour
+    //'rule' => '*/2 * * * *', // Every 2 minutes
+    'callback' => 'crescent_remote_blog_cron',
+  );
+
+  return $items;
+}
+
+
+/**
+ * Cron Job: update all blog posts.
+ */
+function crescent_remote_blog_cron(){
+  $resource = clients_resource_get_for_component('remote_entity', CRESCENT_REMOTE_BLOG_ENTITY_TYPE);
+  $connection = $resource->getConnection();
+  $connection->remote_entity_load_all(CRESCENT_REMOTE_BLOG_ENTITY_TYPE);
+}
+
+
+/**
+ * Implements hook_views_api().
+ */
+function crescent_remote_blog_views_api() {
+  return array("version" => "3.0");
+}
+
+
+///**
+// * Implements hook_cron().
+// */
+//function crescent_remote_blog_entity_cron() {
+//  $resource = clients_resource_get_for_component('remote_entity', CRESCENT_REMOTE_BLOG_ENTITY_TYPE);
+//  $connection = $resource->getConnection();
+//  $connection->remote_entity_load_all(CRESCENT_REMOTE_BLOG_ENTITY_TYPE);
+
+//$queue = DrupalQueue::get('crescent_remote_blog');
+//  $queue_item = array(
+//    'entity_id' => $entity_data->eid,
+//  );
+//  $queue->createItem($queue_item);
+//}
+
+///**
+// * Implements hook_cron_queue_info().
+// */
+//function remote_entity_cron_queue_info() {
+//  $queues['crescent_remote_blog'] = array(
+//    'worker callback' => 'crescent_remote_blog_cron_queue_process',
+//  );
+//  return $queues;
+//}
+//
+///**
+// * Implements callback_cron_queue_info_worker().
+// */
+//function crescent_remote_blog_cron_queue_process($queue_item) {
+//
+//}

@@ -1,0 +1,62 @@
+.sidebar {
+  float: right;
+  width: 390px;
+  display: none;
+  padding-left: 50px;
+
+  h2 {
+    border-bottom: 5px solid #0074c8;
+    padding-bottom: 30px;
+  }
+
+  .views-row {
+    margin-bottom: 20px;
+  }
+
+  .block  {
+    @include clearfix();
+
+    &.cols-three .col {
+      width: 300px;
+      margin-left: 37px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    .hd {
+      padding-bottom: 8px;
+      font-weight: bold;
+      margin-bottom: 24px;
+      font-family: $avenir-ultra-light-italic;
+    }
+
+    h3 {
+      line-height: 1.2;
+      font-family: $avenir-meidum-italic;
+      margin: 0 0 20px;
+      font-size: 30px;
+
+      a {
+        font-family: $avenir-meidum-italic;
+        text-decoration: none;
+        color: #3c3c3c;
+      }
+    }
+
+    .date {
+      font-family: $avenir-meidum-italic;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    a {
+      @include transition(opacity .3s);
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+  }
+}

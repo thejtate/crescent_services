@@ -1,0 +1,66 @@
+.form {
+  padding: 0 158px;
+
+  .form-item {
+    margin: 10px 0;
+  }
+
+  .form-wrapper {
+    border: none;
+    padding: 0;
+    margin: 0;
+
+    label {
+      font-family: $museo-700;
+      margin-bottom: 10px;
+    }
+
+    .webform-component-textfield, .webform-component-email {
+      width: 300px;
+      display: inline-block;
+      margin-left: 20px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    .form-text {
+      padding: 6px 10px;
+      border: 1px solid #adadad;
+      width: 100%;
+      background: #eaeaea;
+    }
+
+    .form-file {
+      font-family: $museo-700;
+    }
+  }
+
+  .captcha {
+    padding: 25px 0 0 0;
+
+    .funnel-reload-captcha {
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+
+    img {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .form-item-captcha-response {
+      display: inline-block;
+      margin: 0;
+    }
+
+    .form-text {
+      width: 105px;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border: 1px solid #adadad;
+      background: #eaeaea;
+    }
+  }
+}

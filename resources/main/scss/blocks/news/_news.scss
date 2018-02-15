@@ -1,0 +1,167 @@
+.sidebar {
+  margin-bottom: 10px;
+  display: none;
+
+  h2 {
+    border-bottom: 5px solid #0074c8;
+    padding-bottom: 30px;
+  }
+
+  .block {
+    @include clearfix();
+
+    &.cols-three .col {
+      width: 300px;
+      margin-left: 37px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    .item-list ul li {
+      margin: 0 0 20px 0;
+
+      a {
+        position: relative;
+        padding-left: 53px;
+
+        &:before {
+          @include pseudo-block($top: 0, $left: 0);
+        }
+      }
+    }
+
+
+    .environmental_services {
+
+        a {
+          position: relative;
+          padding-left: 53px;
+
+          &:before {
+            @include pseudo-block($top: 0, $left: 0);
+          }
+        }
+
+        li {
+
+          &:nth-child(1) a:before {
+            @include oneline-sprite-box($icons, icon-1-hover-s)
+          }
+
+          &:nth-child(2) a:before {
+            @include oneline-sprite-box($icons, icon-2-hover-s)
+          }
+
+          &:nth-child(3) a:before {
+            @include oneline-sprite-box($icons, icon-3-hover-s)
+          }
+
+          &:nth-child(4) a:before {
+            @include oneline-sprite-box($icons, icon-4-hover-s)
+          }
+
+          &:nth-child(5) a:before {
+            @include oneline-sprite-box($icons, icon-5-hover-s)
+          }
+        }
+      }
+
+
+
+    .water_services  {
+
+        li {
+
+          &:nth-child(1) a:before {
+            @include oneline-sprite-box($icons, icon-8-hover-s)
+          }
+
+          &:nth-child(2) a:before {
+            @include oneline-sprite-box($icons, icon-11-hover-s)
+          }
+
+          &:nth-child(3) a:before {
+            @include oneline-sprite-box($icons, icon-9-hover-s)
+          }
+
+          &:nth-child(4) a:before {
+            @include oneline-sprite-box($icons, icon-7-hover-s)
+          }
+
+          &:nth-child(5) a:before {
+            @include oneline-sprite-box($icons, icon-10-hover-s)
+          }
+        }
+      }
+
+
+    .hd {
+      padding-bottom: 8px;
+      font-weight: bold;
+      margin-bottom: 24px;
+      font-family: $avenir-ultra-light-italic;
+    }
+
+    h3 {
+      line-height: 1.2;
+      font-family: $avenir-meidum-italic;
+      margin: 0 0 20px;
+
+      a {
+        font-family: $avenir-meidum-italic;
+        text-decoration: none;
+        color: #3c3c3c;
+      }
+    }
+
+    .date {
+      font-family: $avenir-meidum-italic;
+      margin-bottom: 20px;
+    }
+
+    a {
+      @include transition(opacity .3s);
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+
+    p {
+      margin: 0 0 10px;
+    }
+
+    img {
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        display: block;
+        list-style: none;
+        margin-bottom: 0px;
+
+        a {
+          text-decoration: none;
+          color: #7d7d7d;
+        }
+
+        img {
+          display: inline-block;
+          vertical-align: top;
+        }
+
+        span {
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}

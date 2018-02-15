@@ -1,0 +1,69 @@
+.site-footer {
+  background: #fff;
+  color: #2a4963;
+  font-size: 14px;
+  @include background-image(linear-gradient(left, #fff 0%, #fff 50%, #dae5ea 100%));
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .site-container {
+    height: 92px;
+  }
+
+  .logo {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -26px;
+    @include transition(all .3s);
+
+    &:hover {
+      opacity: .7;
+    }
+  }
+
+  .menu {
+    font-family: $niks-normal;
+    position: absolute;
+    right: 15px;
+    top: 23px;
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      padding: 0;
+      margin-left: 30px;
+      list-style: none;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    a {
+      text-decoration: none;
+      color: #2a4963;
+      @include transition(opacity .3s);
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+  }
+
+  p {
+    color: #426a93;
+    margin: 0;
+    position: absolute;
+    bottom: 23px;
+    text-transform: uppercase;
+    right: 15px;
+    font-family: $niks-normalitalic;
+  }
+}

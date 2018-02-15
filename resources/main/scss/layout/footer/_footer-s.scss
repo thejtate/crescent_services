@@ -1,0 +1,32 @@
+.site-footer {
+  font-size: 16px;
+  padding: 10px;
+
+  .menu {
+    position: relative;
+    right: auto;
+    top: auto;
+    text-align: right;
+    margin-bottom: 10px;
+
+    li {
+      margin-left: 20px;
+    }
+  }
+
+  p {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    text-align: right;
+    font-size: 10px;
+  }
+
+  .site-container {
+    height: 76px;
+  }
+
+  .logo {
+    display: none;
+  }
+}

@@ -1,0 +1,38 @@
+.outer-wrapper {
+  overflow: hidden;
+  padding-bottom: 90px;
+
+  .top-media {
+    height: 355px;
+    overflow: hidden;
+
+    &:before {
+      @include pseudo-block($left: 50%, $bottom: 95px);
+      display: block;
+      background: image-url('bg/water-slice.png');
+      @include transform(translate(-50%, 0));
+      height: 180px;
+      z-index: 2;
+      width: 100%;
+      background-size: 100% 230px;
+      min-width: 1000px;
+    }
+
+    h1 {
+      font-size: 35px;
+      top: 41px;
+      margin-top: -20px;
+    }
+
+    img {
+      width: 145%;
+      transform: translate(-50%, -22%);
+    }
+
+  }
+}
+
+.inner-wrapper {
+  z-index: 100;
+}
+

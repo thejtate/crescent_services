@@ -1,0 +1,20 @@
+.content-wrapper {
+  @include clearfix();
+
+  &.with-sidebar {
+
+    .sidebar {
+      display: block;
+    }
+  }
+
+  .block-system {
+    width: 100%;
+
+
+    p {
+      margin: 0 0 25px;
+    }
+  }
+
+}

@@ -1,0 +1,122 @@
+.page-services {
+
+  .text-slider{
+
+    .right-part {
+      display: block;
+    }
+  }
+
+  .right-part {
+    max-width: 522px;
+    margin: 0 auto;
+    display: none;
+
+    .flexslider .slides > li {
+      max-height: 320px;
+    }
+  }
+
+  .quicktabs-wrapper {
+
+    .title-nav {
+
+
+      #quicktabs-tab-environmental_services-0:before {
+        @include pseudo-block($top: 17px, $left: 25px);
+        @include oneline-sprite-box($icons, icon-2-hover);
+      }
+
+      #quicktabs-tab-environmental_services-1:before {
+        @include pseudo-block($top: 38px, $left: 14px);
+        @include oneline-sprite-box($icons, icon-3-hover);
+      }
+
+      #quicktabs-tab-environmental_services-2:before {
+        @include pseudo-block($top: 17px, $left: 25px);
+        @include oneline-sprite-box($icons, icon-4-hover);
+      }
+
+      #quicktabs-tab-environmental_services-3:before {
+        @include pseudo-block($top: 17px, $left: 25px);
+        @include oneline-sprite-box($icons, icon-5-hover);
+      }
+    }
+
+    .quicktabs-tabs {
+
+      li {
+
+        &:nth-child(1) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-2);
+            }
+          }
+        }
+
+        &:nth-child(2) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-3);
+            }
+          }
+        }
+
+        &:nth-child(3) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-4);
+            }
+          }
+        }
+
+        &:nth-child(4) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-5);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .quicktabs_main {
+
+    ul {
+      margin: 0 0 40px;
+      padding: 0;
+      font-size: 18px;
+
+      li {
+        list-style: none;
+        text-align: center;
+        margin-bottom: 8px;
+
+        span {
+          position: relative;
+          padding-left: 25px;
+
+          &:before {
+            @include pseudo-block($left: 0, $top: -2px);
+            @include oneline-sprite-box($icons, icon-6);
+          }
+        }
+      }
+    }
+
+    .img img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}

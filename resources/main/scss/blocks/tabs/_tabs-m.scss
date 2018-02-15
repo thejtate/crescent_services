@@ -1,0 +1,228 @@
+.block-system {
+
+  h2 {
+    text-align: center;
+    font-size: 60px;
+    font-family: $museoslab-100;
+    color: #6b6b6b;
+    text-transform: uppercase;
+
+    .front & {
+      font-family: $museo-700;
+      text-align: left;
+      font-size: 51px;
+      color: #3c3c3c;
+      text-transform: none;
+    }
+  }
+
+  h5 {
+    font-size: 36px;
+  }
+
+  &.style-a {
+
+    h2 {
+      border-bottom: 1px solid #c0c0c0;
+      padding-bottom: 50px;
+    }
+  }
+
+  .title {
+    padding: 50px 0 0 0;
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+    text-transform: uppercase;
+  }
+
+  .bg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -3000px;
+    @include background-image(linear-gradient(#fff 0%, #e6e6e5 100%));
+    width: 6000px;
+    display: block;
+    z-index: -1;
+    border-bottom: 1px solid #848484;
+  }
+
+  .content {
+
+    .content {
+      margin-bottom: 25px;
+    }
+
+    .cols-two {
+      margin-bottom: 0;
+    }
+  }
+
+  .quicktabs-wrapper {
+
+    .item-list {
+      background: #fff;
+      @include box-shadow(inset 0 0 1px 0 #000);
+      @include border-radius(10px);
+      @include transition(all .3s);
+      padding: 0 25px;
+      position: relative;
+
+      &:before {
+        @include pseudo-block($top: 42px, $right: 27px);
+        @include oneline-sprite-box($icons, arrow-top-tabs);
+        @include transition(all .4s);
+      }
+
+      &.active:before {
+        @include transform(rotate(180deg))
+      }
+
+      span.title-nav {
+        padding: 35px 0 35px 90px;
+        display: block;
+        font-family: $niks-bold;
+
+        a {
+          display: inline-block;
+          color: #6c6c6d;
+          font-size: 30px;
+          text-decoration: none;
+        }
+
+      }
+    }
+
+    .quicktabs-tabs {
+      margin: 0;
+      font-size: 14px;
+      vertical-align: top;
+      text-align: center;
+      display: none;
+      font-family: $niks-bold;
+      position: absolute;
+      background: #fff;
+      padding: 0 25px;
+      top: 104px;
+      @include border-radius(0 0 10px 10px);
+      border-left: 1px solid #c5c5c5;
+      border-right: 1px solid #c5c5c5;
+      border-bottom: 1px solid #c5c5c5;
+      left: 0;
+      right: 0;
+      z-index: 100;
+
+      li {
+        display: block;
+        list-style: none;
+        padding: 35px 0 35px 120px;
+        margin: 0;
+        font-size: 30px;
+        position: relative;
+        cursor: pointer;
+        vertical-align: top;
+        text-align: left;
+
+        &:first-child {
+          border-top: 1px solid #c5c5c5;
+        }
+
+        .ajax-progress-throbber {
+          position: absolute;
+          right: -10px;
+          top: 10px;
+        }
+
+        .img {
+          text-align: center;
+
+        }
+
+        a {
+          text-decoration: none;
+          display: inline-block;
+          color: #6c6c6d;
+          @include transition(opacity .3s);
+
+          &:hover {
+            opacity: .7;
+          }
+        }
+
+        span {
+          color: #6c6c6d;
+          text-decoration: none;
+          display: block;
+          margin-top: 15px;
+        }
+      }
+    }
+  }
+
+  .tabs-content {
+
+    .tab-item {
+      @include clearfix();
+      display: table;
+      margin-bottom: 70px;
+
+      .img {
+        width: 200px;
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .text {
+        width: 780px;
+        vertical-align: middle;
+        display: table-cell;
+
+        .page-careers & {
+          margin: 0 auto;
+          display: block;
+        }
+      }
+    }
+
+    .top-img {
+      text-align: center;
+    }
+
+    h3, h4 {
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      font-family: $museo-300;
+      font-size: 36px;
+    }
+
+    h4 {
+      font-family: $museo-700;
+      margin-bottom: 25px;
+      color: #7d7d7d;
+    }
+
+    ul {
+      margin: 0 0 25px 0;
+
+      &.with-arrow {
+
+        li:before {
+          @include pseudo-block($top: 0, $left: -40px);
+          border-top: 12px solid transparent;
+          border-left: 21px solid #ffac03;
+          border-bottom: 12px solid transparent;
+        }
+      }
+
+      li {
+        position: relative;
+        margin-bottom: 25px;
+      }
+    }
+  }
+}

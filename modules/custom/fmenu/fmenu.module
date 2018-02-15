@@ -1,0 +1,121 @@
+<?php
+
+/**
+ * @file
+ * Menu theme module
+ */
+
+/**
+ * Get rendered menu tree.
+ *
+ * @param $menu_name
+ * @return string
+ */
+function fmenu_get_menu_tree($menu_name){
+  $main_menu_tree = fmenu_menu_tree_full_data($menu_name);
+  if (drupal_is_front_page()){
+    foreach($main_menu_tree as $key => $item){
+      if ($item['link']['link_path'] == "<front>"){
+        $main_menu_tree[$key]['link']['in_active_trail'] = TRUE;
+      }
+    }
+  }
+  $main_menu_tree = fmenu_menu_tree_clear($main_menu_tree);
+  $tree = menu_tree_output($main_menu_tree);
+  return render($tree);
+}
+
+/**
+ * Build menu.
+ */
+function fmenu_menu_tree_full_data($menu_name) {
+  $tree = &drupal_static(__FUNCTION__, array());
+
+  // Check if the active trail has been overridden for this menu tree.
+  $active_path = menu_tree_get_path($menu_name);
+
+  // Generate a cache ID(cid) specific for this page
+  $item = menu_get_item($active_path);
+  $cid = "links:$menu_name:full:{$item['href']}:{$GLOBALS['language']->language}";
+
+
+  // Did we already build this menu during this request?
+  if (isset($tree[$cid]))
+    return $tree[$cid];
+
+  // If the static variable doesn't have the data, check {cache_menu}.
+  $cache = cache_get($cid, 'cache_menu');
+  if ($cache && isset($cache->data)) {
+    $tree_params = $cache->data;
+    if (isset($tree_params))
+      return $tree[$cid] = menu_build_tree($menu_name, $tree_params);
+  }
+
+  $tree_params = array(
+    'min_depth' => 1,
+    'max_depth' => NULL,
+  );
+  // Parent mlids; used both as key and value to ensure uniqueness.
+  // We always want all the top-level links with plid == 0.
+  $active_trail = array(0 => 0);
+
+  // Find a menu link corresponding to the current path. If $active_path
+  // is NULL, let menu_link_get_preferred() determine the path.
+  $active_link = menu_link_get_preferred($active_path, $menu_name);
+  // The active link may only be taken into account to build the
+  // active trail, if it resides in the requested menu. Otherwise,
+  // we'd needlessly re-run _menu_build_tree() queries for every menu
+  // on every page.
+  if (@$active_link['menu_name'] == $menu_name) {
+    // Use all the coordinates, except the last one because there
+    // can be no child beyond the last column.
+    for ($i = 1; $i < MENU_MAX_DEPTH; $i++) {
+      if ($active_link['p' . $i])
+        $active_trail[$active_link['p' . $i]] = $active_link['p' . $i];
+    }
+  }
+
+  $parents = $active_trail;
+  do {
+    $result = db_select('menu_links', NULL, array('fetch' => PDO::FETCH_ASSOC))
+      ->fields('menu_links', array('mlid'))
+      ->condition('menu_name', $menu_name)
+      //->condition('expanded', 1)
+      ->condition('has_children', 1)
+      ->condition('plid', $parents, 'IN')
+      ->condition('mlid', $parents, 'NOT IN')
+      ->execute();
+    $num_rows = FALSE;
+    foreach ($result as $item) {
+      $parents[$item['mlid']] = $item['mlid'];
+      $num_rows = TRUE;
+    }
+  } while ($num_rows);
+  $tree_params['expanded'] = $parents;
+  $tree_params['active_trail'] = $active_trail;
+
+  // Cache the tree building parameters using the page-specific cid.
+  cache_set($cid, $tree_params, 'cache_menu');
+
+  // Build the tree using the parameters; the resulting tree will be cached by _menu_build_tree().
+  return $tree[$cid] = menu_build_tree($menu_name, $tree_params);
+}
+
+
+/**
+ * Clear menu from menu position items.
+ *
+ * @param $main_menu_tree
+ * @return mixed
+ */
+function fmenu_menu_tree_clear($main_menu_tree){
+  foreach($main_menu_tree as $key => $value){
+    if (isset($value['link']['page_callback']) && $value['link']['page_callback'] == "menu_position_router"){
+      unset($main_menu_tree[$key]);
+    }
+    if (isset($value['below']) && !empty($value['below'])){
+      $main_menu_tree[$key]['below'] = fmenu_menu_tree_clear($value['below']);
+    }
+  }
+  return $main_menu_tree;
+}

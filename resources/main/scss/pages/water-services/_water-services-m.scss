@@ -1,0 +1,133 @@
+.page-water-services {
+
+  .title-nav {
+
+    #quicktabs-tab-water_services-0:before {
+      @include pseudo-block($top: 17px, $left: 25px);
+      @include oneline-sprite-box($icons, icon-8-hover);
+    }
+
+    #quicktabs-tab-water_services-1:before {
+      @include pseudo-block($top: 17px, $left: 25px);
+      @include oneline-sprite-box($icons, icon-11-hover);
+    }
+
+    #quicktabs-tab-water_services-2:before {
+      @include pseudo-block($top: 17px, $left: 25px);
+      @include oneline-sprite-box($icons, icon-9-hover);
+    }
+
+    #quicktabs-tab-water_services-3:before {
+      @include pseudo-block($top: 17px, $left: 25px);
+      @include oneline-sprite-box($icons, icon-7-hover);
+    }
+
+    #quicktabs-tab-water_services-4:before {
+      @include pseudo-block($top: 17px, $left: 25px);
+      @include oneline-sprite-box($icons, icon-10-hover);
+    }
+  }
+
+  .text-slider{
+    .right-part {
+      display: block;
+    }
+  }
+
+  .right-part {
+    max-width: 522px;
+    margin: 0 auto;
+    display: none;
+
+    .flexslider .slides > li {
+      max-height: 320px;
+    }
+  }
+
+  .quicktabs-wrapper {
+
+    .quicktabs-tabs {
+
+      li {
+
+        &:nth-child(1) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-8);
+            }
+          }
+        }
+
+        &:nth-child(2) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-11);
+            }
+          }
+        }
+
+        &:nth-child(3) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-9);
+            }
+          }
+        }
+
+        &:nth-child(4) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-7);
+            }
+          }
+
+        }
+
+        &:nth-child(5) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-10);
+            }
+          }
+
+        }
+      }
+    }
+  }
+
+  .quicktabs_main {
+
+    .quicktabs-tabpage:nth-child(1) {
+
+      .text-inner {
+        width: 100%;
+      }
+
+      ul li span:before {
+        @include pseudo-block($left: 0, $top: -7px);
+        @include oneline-sprite-box($icons, icon-12);
+      }
+    }
+
+    .quicktabs-tabpage:nth-child(5) {
+
+      .text-inner {
+        width: 100%;
+      }
+
+      ul {
+        width: 580px;
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+.outer-wrapper {
+  overflow: hidden;
+  padding-bottom: 90px;
+
+  .top-media {
+
+    h1 {
+      font-size: 65px;
+      top: 100px;
+    }
+
+  }
+}
+
+.inner-wrapper {
+  z-index: 100;
+}
+

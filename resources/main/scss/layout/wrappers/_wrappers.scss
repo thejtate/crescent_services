@@ -1,0 +1,70 @@
+.outer-wrapper {
+  overflow: hidden;
+  padding-bottom: 90px;
+
+  .front & {
+
+    &:before {
+      @include pseudo-block($top: 44%, $left: 0, $right: 0);
+      background: image-url('bg/spline.png');
+      background-size: cover;
+      height: 315px;
+      opacity: .3;
+    }
+  }
+
+
+  .top-media {
+    background: #fff;
+    position: relative;
+    padding-bottom: 135px;
+    max-height: 869px;
+    overflow: hidden;
+
+    h1 {
+      position: absolute;
+      color: #fff;
+      left: 15px;
+      font-family: $museoslab-100;
+      z-index: 100;
+      margin: 0;
+      text-shadow: 2px 2px 9px #4C4B4B;
+    }
+
+    &:before {
+      @include pseudo-block($left: 50%, $bottom: 49px);
+      display: block;
+      background: image-url('bg/water-slice.png');
+      @include transform(translate(-50%, 0));
+      height: 220px;
+      z-index: 2;
+      width: 100%;
+      background-size: 100% 290px;
+      min-width: 1300px;
+    }
+
+    &:after {
+      @include pseudo-block($left: 0, $bottom: -98px, $right: 0);
+      background: #fff;
+      height: 199px;
+      z-index: 1;
+    }
+
+    img {
+      height: auto;
+      display: block;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      left: 50%;
+      @include transform(translate(-50%, 0));
+    }
+  }
+}
+
+
+
+.inner-wrapper {
+  z-index: 100;
+}
+

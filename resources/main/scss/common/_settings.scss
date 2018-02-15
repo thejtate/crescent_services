@@ -1,0 +1,31 @@
+$icons: sprite-map('icons/*.png', $spacing: 8px, $layout: 'smart');
+//$h-sprites: sprite-map('h-sprites/*.png',$layout: 'vertical', $spacing: 8px);
+//$v-sprites: sprite-map('v-sprites/*.png', $layout: 'horizontal', $spacing: 8px);
+
+$experimental-support-for-svg: true;
+$experimental-support-for-opera: false;
+
+//width
+$width: 980px;
+$width-l: 980px;
+$width-m: 768px;
+
+
+
+//fonts
+$avenir-ultra-light: sourcesanspro-extralight;
+$avenir-ultra-light-italic: sourcesanspro-extralightitalic;
+$avenir-bold: sourcesanspro-bold;
+$avenir-regular: sourcesanspro-regular;
+$avenir-meidum: sourcesanspro-semibold;
+$avenir-meidum-italic: sourcesanspro-semibolditalic;
+$avenir-heavy: sourcesanspro-black;
+$niks-bold: niks-bold;
+$niks-bold-italic: niks-bolditalic;
+$niks-normal: niks-normal;
+$niks-normalitalic: niks-normalitalic;
+$museo-700: museo-700;
+$museo-300: museo-300;
+$museoslab-100: museoslab-100;
+$museoslab-500: museoslab-500;
+$museoslab-700: museoslab-700;

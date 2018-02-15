@@ -1,0 +1,52 @@
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  position: relative;
+  font-size: 18px;
+  color: #7d7d7d;
+  font-family: $avenir-meidum;
+}
+
+img {
+  height: auto;
+}
+
+*, :after, :before {
+  @include box-sizing(border-box);
+  outline: none;
+}
+
+h1, h2, h3, h4, h5, h6, strong {
+  font-weight: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #3c3c3c;
+  font-family: $museo-700;
+}
+
+h2 {
+  margin: 0 0 35px;
+  font-size: 51px;
+}
+
+img[style*="right"] {
+  margin: 0 0 10px 20px;
+  clear: right;
+}
+
+img[style*="left"] {
+  margin: 0 20px 10px 0;
+  clear: left;
+}
+
+.pager a {
+  color: #0B81D6;
+}
+
+a {
+  color: #f6a704;
+}

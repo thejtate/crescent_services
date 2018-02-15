@@ -1,0 +1,198 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Sergey Grigorenko (svipsa@gmail.com)
+ * Date: 07.09.15
+ * Time: 12:35
+ */
+
+
+
+define("INSTALL_CRESCENT_REMOTE_BLOG_TAGS", "crescent_remote_blog_tags");
+define("INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE", "crbp");
+define("INSTALL_CRESCENT_REMOTE_BLOG_TABLE", "crbps");
+
+
+/**
+ * Implementation of hook_schema().
+ */
+function crescent_remote_blog_schema() {
+  module_load_include("install", "remote_entity", "remote_entity");
+  $schema = array(
+    INSTALL_CRESCENT_REMOTE_BLOG_TABLE => remote_entity_schema_table('crescent remote blog post entity type'),
+  );
+
+  return $schema;
+}
+
+
+function crescent_remote_blog_install() {
+  cache_clear_all();
+
+  _crescent_remote_blog_create_taxonomies();
+
+
+  // tags
+  $field = array(
+    'field_name' => 'field_' . INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_tags',
+    'type' => 'taxonomy_term_reference',
+    'label' => t('Tags'),
+    'settings' => array(
+      'allowed_values' => array(
+        array(
+          'vocabulary' => CRESCENT_REMOTE_BLOG_TAGS,
+          'parent' => 0,
+        )
+      ),
+    ),
+    'cardinality' => -1,
+  );
+  field_create_field($field);
+
+  // date
+  $field = array(
+    'field_name' => 'field_' . INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_date',
+    'type' => 'datetime',
+    'label' => t('Date'),
+    'settings' => array(
+      'repeat' => 0,
+      'todate' => '',
+      'granularity' => array(
+        'year' => 'year',
+        'month' => 'month',
+        'day' => 'day',
+      ),
+      'tz_handling' => 'none',
+      'timezone_db' => ''
+    ),
+    'cardinality' => 1,
+  );
+  field_create_field($field);
+
+
+  $instance = array(
+    'field_name' => 'field_' . INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_tags',
+    'entity_type' => INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE,
+    'bundle' => INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE,
+    'label' => t('Tags'),
+    'required' => FALSE,
+    'widget' => array(
+      'type' => 'taxonomy_autocomplete',
+      'weight' => -10,
+    ),
+  );
+  field_create_instance($instance);
+
+  $instance = array(
+    'field_name' => 'field_' . INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_date',
+    'entity_type' => INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE,
+    'bundle' => INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE,
+    'label' => t('Date'),
+    'required' => FALSE,
+    'widget' => array(
+      'type' => 'date_popup',
+      'settings' => array(
+        'input_format' => 'Y-m-d H:i:s',
+        'year_range' => '-3:+3',
+        'increment' => 1,
+      ),
+    ),
+  );
+  field_create_instance($instance);
+}
+
+
+function crescent_remote_blog_uninstall() {
+  field_delete_field('field_' . INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_tags');
+  field_delete_field('field_' . INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_date');
+
+  $instance = array(
+    'field_name' => 'field_' . INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_tags',
+    'entity_type' => INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE,
+    'bundle' => INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE,
+    'label' => t('Tags'),
+    'required' => FALSE,
+    'widget' => array(
+      'type' => 'taxonomy_autocomplete',
+      'weight' => -10,
+    ),
+  );
+  field_delete_instance($instance);
+
+
+  $instance = array(
+    'field_name' => 'field_' . INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE . '_date',
+    'entity_type' => INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE,
+    'bundle' => INSTALL_CRESCENT_REMOTE_BLOG_ENTITY_TYPE,
+    'label' => t('Date'),
+    'required' => FALSE,
+    'widget' => array(
+      'type' => 'date_popup',
+      'settings' => array(
+        'input_format' => 'Y-m-d H:i:s',
+        'year_range' => '-3:+3',
+        'increment' => 1,
+      ),
+    ),
+  );
+  field_delete_instance($instance);
+
+
+  // Delete taxonomies.
+  $vocabularies = _crescent_remote_blog_get_taxonomy_vocabularies();
+  foreach ($vocabularies as $machine_name => $data) {
+    $taxonomy = taxonomy_vocabulary_machine_name_load($machine_name);
+    taxonomy_vocabulary_delete($taxonomy->vid);
+  }
+
+  menu_cache_clear_all();
+}
+
+
+
+/**
+ * Implements hook_taxonomy_default_vocabularies().
+ */
+function _crescent_remote_blog_get_taxonomy_vocabularies() {
+  return array(
+    'crescent_remote_blog_tags' => array(
+      'name' => 'Remote blog tags',
+      'machine_name' => 'crescent_remote_blog_tags',
+      'description' => '',
+      'hierarchy' => '0',
+      'module' => 'taxonomy',
+      'weight' => '0',
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          0 => 'skos:ConceptScheme',
+        ),
+        'name' => array(
+          'predicates' => array(
+            0 => 'dc:title',
+          ),
+        ),
+        'description' => array(
+          'predicates' => array(
+            0 => 'rdfs:comment',
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+
+function _crescent_remote_blog_create_taxonomies(){
+  $vocabularies = _crescent_remote_blog_get_taxonomy_vocabularies();
+
+  $existing = taxonomy_get_vocabularies();
+  foreach ($vocabularies as $vocabulary) {
+    $vocabulary = (object) $vocabulary;
+    foreach ($existing as $existing_vocab) {
+      if ($existing_vocab->machine_name === $vocabulary->machine_name) {
+        $vocabulary->vid = $existing_vocab->vid;
+      }
+    }
+    taxonomy_vocabulary_save($vocabulary);
+  }
+}

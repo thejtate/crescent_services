@@ -1,0 +1,143 @@
+.page-enviro {
+
+  .block-system .text-inner {
+    width: 100%;
+  }
+
+  h5 {
+    margin: 60px 0 30px 0;
+    border-bottom: 1px solid #c0c0c0;
+    font-family: $museoslab-100;
+    text-align: center;
+    color: #353535;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .list-desc {
+    font-size: 14px;
+    color: #6d6d6d;
+    float: right;
+    width: 420px;
+  }
+
+  .right-part {
+
+    .desc {
+      width: 170px;
+      font-family: $avenir-ultra-light-italic;
+      font-size: 14px;
+      display: block;
+      margin: 0 auto 15px auto;
+      text-align: center;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .login-btn {
+      display: inline-block;
+      vertical-align: middle;
+      position: relative;
+
+      .btn {
+        text-decoration: none;
+        font-size: 17px;
+        display: inline-block;
+        padding: 5px 8px 5px 31px;
+        background: #103d5d;
+        font-family: $niks-bold-italic;
+        color: #f6a704;
+        @include border-radius(5px);
+        position: relative;
+        @include transition(opacity .3s);
+
+        &:hover {
+          opacity: .7;
+        }
+
+        &:before {
+          @include oneline-sprite-box($icons, icon-login);
+          @include pseudo-block($left: 7px, $top: 50%);
+          margin-top: -9px;
+        }
+      }
+    }
+
+  }
+
+  .quicktabs_main {
+
+    ul {
+      margin: 0 0 40px;
+      padding: 0;
+      font-size: 18px;
+
+      li {
+        list-style: none;
+        text-align: center;
+        margin-bottom: 8px;
+
+        span {
+          position: relative;
+          padding-left: 25px;
+        }
+      }
+    }
+
+    .img {
+      text-align: center;
+    }
+  }
+
+  .list-wrapper {
+
+    .img {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 120px;
+    }
+
+    .list {
+      display: inline-block;
+      vertical-align: middle;
+      color: #1c1f22;
+
+      ul {
+        font-size: 24px;
+
+        & > li {
+          text-align: left;
+          margin-bottom: 13px;
+          position: relative;
+
+          &:before {
+            @include pseudo-block($top: 0, $left: -30px);
+            border-top: 16px solid transparent;
+            border-left: 23px solid #f6a704;
+            border-bottom: 16px solid transparent;
+          }
+
+          ul {
+            margin: 15px 0;
+
+            li {
+              text-align: left;
+              position: relative;
+
+              &:before {
+                @include pseudo-block($top: 0, $left: -18px);
+                border-top: 10px solid transparent;
+                border-left: 13px solid #bfcbd6;
+                border-bottom: 10px solid transparent;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

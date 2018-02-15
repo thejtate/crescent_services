@@ -1,0 +1,192 @@
+.page-enviro {
+
+  h5 {
+    margin: 30px 0 20px 0;
+    font-size: 18px;
+    text-transform: uppercase;
+    padding-bottom: 20px;
+  }
+
+  .list-desc {
+    font-size: 14px;
+    color: #6d6d6d;
+    float: right;
+    width: 100%;
+  }
+
+  .title-nav {
+
+    #quicktabs-tab-enviroedge-0:before {
+      @include pseudo-block($top: 14px, $left: 16px);
+      @include oneline-sprite-box($icons, enviro-icon-1-active-s);
+    }
+
+    #quicktabs-tab-enviroedge-1:before {
+      @include pseudo-block($top: 21px, $left: 13px);
+      @include oneline-sprite-box($icons, enviro-icon-2-active-s);
+    }
+
+    #quicktabs-tab-enviroedge-2:before {
+      @include pseudo-block($top: 14px, $left: 16px);
+      @include oneline-sprite-box($icons, enviro-icon-3-active-s);
+    }
+
+    #quicktabs-tab-enviroedge-3:before {
+      @include pseudo-block($top: 14px, $left: 16px);
+      @include oneline-sprite-box($icons, enviro-icon-4-active-s);
+    }
+
+    #quicktabs-tab-enviroedge-4:before {
+      @include pseudo-block($top: 14px, $left: 16px);
+      @include oneline-sprite-box($icons, enviro-icon-5-active-s);
+    }
+  }
+
+
+  .quicktabs-wrapper {
+
+    .quicktabs-tabs {
+
+      li {
+
+        &:nth-child(1) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-1-s);
+            }
+          }
+        }
+
+        &:nth-child(2) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-2-s);
+              left: -12px;
+            }
+          }
+        }
+
+        &:nth-child(3) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-3-s);
+            }
+          }
+        }
+
+        &:nth-child(4) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-4-s);
+            }
+          }
+        }
+
+        &:nth-child(5) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-5-s);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .right-part {
+    text-transform: none;
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 20px 0;
+  }
+
+  .quicktabs_main {
+
+    ul {
+      margin: 0 0 40px;
+      padding: 0;
+      font-size: 18px;
+
+      li {
+        list-style: none;
+        text-align: center;
+        margin-bottom: 8px;
+
+        span {
+          position: relative;
+          padding-left: 25px;
+        }
+      }
+    }
+
+    .img {
+      text-align: center;
+    }
+  }
+
+  .list-wrapper {
+
+    .img {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 0px;
+      margin-bottom: 15px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .list {
+      display: block;
+      vertical-align: middle;
+      color: #1c1f22;
+      width: 190px;
+      margin: 0 auto;
+
+      ul {
+        font-size: 16px;
+
+        & > li {
+          text-align: left;
+          margin-bottom: 13px;
+          position: relative;
+
+          &:before {
+            @include pseudo-block($top: 0, $left: -30px);
+            border-top: 10px solid transparent;
+            border-left: 16px solid #f6a704;
+            border-bottom: 10px solid transparent;
+          }
+
+          ul {
+            margin: 15px 0;
+
+            li {
+              text-align: left;
+              position: relative;
+
+              &:before {
+                @include pseudo-block($top: 0, $left: -18px);
+                border-top: 7px solid transparent;
+                border-left: 10px solid #bfcbd6;
+                border-bottom: 7px solid transparent;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

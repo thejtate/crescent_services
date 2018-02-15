@@ -1,0 +1,97 @@
+.b-envire-edge {
+  height: 617px;
+  background: image-url('bg/enviro-edge.png') no-repeat;
+  @include background-size(100% 100%);
+  padding-top: 144px;
+  font-family: $avenir-regular;
+  position: relative;
+  color: #1f1f1f;
+
+  .site-container {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .logo, .login-btn {
+    display: inline-block;
+    vertical-align: middle;
+
+    img {
+      display: block;
+    }
+  }
+
+  .logo {
+    margin-right: 30px;
+    min-height: 61px;
+  }
+
+  .login-btn {
+
+    .btn {
+      text-decoration: none;
+      font-size: 17px;
+      display: inline-block;
+      padding: 5px 8px 5px 31px;
+      background: #103d5d;
+      font-family: $niks-bold-italic;
+      color: #f6a704;
+      @include border-radius(5px);
+      position: relative;
+      @include transition(opacity .3s);
+
+      &:hover {
+        opacity: .7;
+      }
+
+      &:before {
+        @include oneline-sprite-box($icons, icon-login);
+        @include pseudo-block($left: 7px, $top: 50%);
+        margin-top: -9px;
+      }
+    }
+  }
+
+  .hd {
+    margin-bottom: 34px;
+  }
+
+  .text {
+    letter-spacing: 1px;
+  }
+
+  p {
+    margin: 0 0 20px;
+  }
+
+  .link {
+    position: absolute;
+    left: 21%;
+    bottom: 88px;
+    font-family: $museo-700;
+    font-size: 19px;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    margin-top: -12px;
+
+    &:hover:before {
+      left: -24px;
+    }
+
+    &:after {
+      @include oneline-sprite-box($icons, link-img);
+      @include pseudo-block($left: -78px, $top: -226px);
+    }
+
+    &:before {
+      @include transition(left .3s);
+      @include pseudo-block($left: -28px, $top: 50%);
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 21px solid #fff;
+      margin-top: -12px;
+    }
+  }
+}

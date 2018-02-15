@@ -1,0 +1,175 @@
+.page-water-services {
+
+  .quicktabs-wrapper {
+
+    .quicktabs-tabs {
+
+      li {
+
+        &:nth-child(1) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-8);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-8-hover);
+          }
+        }
+
+        &:nth-child(2) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-11);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-11-hover);
+          }
+        }
+
+        &:nth-child(3) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-9);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-9-hover);
+          }
+        }
+
+        &:nth-child(4) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-7);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-7-hover);
+          }
+        }
+
+        &:nth-child(5) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-10);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-10-hover);
+          }
+        }
+      }
+    }
+  }
+
+  .text-slider {
+
+    .left-part {
+      width: 420px;
+      float: left;
+      padding-right: 30px;
+    }
+
+    .right-part {
+      display: block;
+    }
+  }
+
+  .left-part {
+    width: 100%;
+  }
+
+  .right-part {
+    width: 540px;
+    float: right;
+    display: none;
+
+    .flexslider .slides > li {
+      max-height: 320px;
+    }
+  }
+
+  .quicktabs_main {
+
+    ul {
+      padding: 0;
+      font-size: 18px;
+
+      li {
+        list-style: none;
+        text-align: left;
+        margin-bottom: 35px;
+
+        span {
+          position: relative;
+          padding-left: 48px;
+          display: inline-block;
+          text-align: left;
+        }
+      }
+    }
+
+    .quicktabs-tabpage:nth-child(1) {
+
+      h6 {
+        font-size: 24px;
+        text-transform: none;
+        margin: 0 0 50px 0;
+      }
+
+      ul li span:before {
+        @include pseudo-block($left: 0, $top: -7px);
+        @include oneline-sprite-box($icons, icon-12);
+      }
+    }
+
+    .quicktabs-tabpage:nth-child(5) {
+
+      ul {
+        margin: 0 auto;
+
+        li {
+          margin-bottom: 20px;
+          text-align: left;
+
+          span {
+            display: block;
+            padding-left: 75px;
+
+            &:before {
+              @include pseudo-block($left: 0, $top: 5px);
+              @include oneline-sprite-box($icons, icon-13);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #quicktabs-tabpage-water_services-3 .text-inner {
+    padding: 0 100px;
+
+  }
+
+  .img img {
+    width: 100%;
+    height: auto;
+  }
+}

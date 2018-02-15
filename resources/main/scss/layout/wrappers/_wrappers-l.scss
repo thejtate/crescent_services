@@ -1,0 +1,33 @@
+.outer-wrapper {
+  overflow: hidden;
+  padding-bottom: 90px;
+
+  .top-media {
+
+    h1 {
+      font-size: 85px;
+      top: 180px;
+    }
+
+    img {
+      min-width: 1350px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      left: 50%;
+      @include transform(translate(-50%, 0));
+    }
+  }
+
+  .title-nav{
+    display: none;
+  }
+}
+
+.inner-wrapper {
+  z-index: 100;
+}
+

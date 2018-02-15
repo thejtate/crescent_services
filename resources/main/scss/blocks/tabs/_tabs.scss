@@ -1,0 +1,209 @@
+.block-system {
+
+  h2 {
+    font-family: $museo-300;
+    color: #6b6b6b;
+    text-transform: uppercase;
+
+    .front & {
+      text-transform: none;
+      font-family: $museo-700;
+      color: #3c3c3c;
+    }
+  }
+
+  h5 {
+    margin: 50px 0;
+    border-bottom: 1px solid #c0c0c0;
+    padding-bottom: 50px;
+    font-family: $museoslab-100;
+    text-align: center;
+    color: #353535;
+    text-transform: uppercase;
+  }
+
+  h6 {
+    font-family: $museo-300;
+    text-align: center;
+    color: #353535;
+    text-transform: uppercase;
+    font-size: 14px;
+
+    .page-water-services & {
+      text-transform: none;
+      font-family: $avenir-meidum;
+    }
+  }
+
+  &.style-a {
+
+    h2 {
+      border-bottom: 1px solid #c0c0c0;
+      padding-bottom: 50px;
+    }
+  }
+
+  .title {
+    padding: 50px 0 0 0;
+    margin-bottom: 40px;
+    position: relative;
+    text-transform: uppercase;
+
+    h2 {
+      text-align: center;
+      font-family: $museoslab-100;
+    }
+  }
+
+  .bg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -3000px;
+    @include background-image(linear-gradient(#fff 0%, #e6e6e5 100%));
+    width: 6000px;
+    display: block;
+    z-index: -1;
+    border-bottom: 1px solid #848484;
+  }
+
+  .content {
+
+    .content {
+      margin-bottom: 25px;
+    }
+
+    .cols-two {
+      margin-bottom: 0;
+    }
+  }
+
+  .quicktabs-wrapper {
+
+    .quicktabs-tabs {
+      padding-top: 115px;
+      margin: 0;
+      font-size: 14px;
+      display: block;
+      vertical-align: top;
+      position: relative;
+      text-align: center;
+
+      a {
+        padding-top: 17px;
+        color: #6c6c6d;
+
+        &.active {
+          color: #6c6c6d;
+        }
+      }
+
+      li {
+        display: inline-block;
+        list-style: none;
+        padding: 0 10px 34px;
+        margin: 0;
+        position: relative;
+        cursor: pointer;
+        vertical-align: top;
+
+        .ajax-progress-throbber {
+          position: absolute;
+          right: -10px;
+          top: 10px;
+        }
+
+        .img {
+          text-align: center;
+        }
+
+        a {
+          text-decoration: none;
+          display: block;
+          @include transition(opacity .3s);
+
+          &:hover {
+            opacity: .7;
+          }
+
+          &:before {
+            @include pseudo-block($bottom: 19px, $left: 0);
+          }
+        }
+
+        span {
+          color: #6c6c6d;
+          text-decoration: none;
+          display: block;
+          margin-top: 15px;
+        }
+      }
+    }
+  }
+
+  .tabs-content {
+
+    .tab-item {
+      @include clearfix();
+      display: table;
+      margin-bottom: 70px;
+
+      .img {
+        width: 200px;
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .text {
+        width: 780px;
+        vertical-align: middle;
+        display: table-cell;
+
+        .page-careers & {
+          margin: 0 auto;
+          display: block;
+        }
+      }
+    }
+
+    .top-img {
+      text-align: center;
+    }
+
+    h3, h4 {
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      font-family: $museo-300;
+      font-size: 36px;
+    }
+
+    h4 {
+      font-family: $museo-700;
+      margin-bottom: 25px;
+      color: #7d7d7d;
+    }
+
+    ul {
+      margin: 0 0 25px 0;
+
+      &.with-arrow {
+
+        li:before {
+          @include pseudo-block($top: 0, $left: -40px);
+          border-top: 12px solid transparent;
+          border-left: 21px solid #ffac03;
+          border-bottom: 12px solid transparent;
+        }
+      }
+
+      li {
+        position: relative;
+        margin-bottom: 25px;
+      }
+    }
+  }
+}

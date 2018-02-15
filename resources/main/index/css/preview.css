@@ -1,0 +1,90 @@
+html, body {
+  padding: 0px;
+  margin: 0px;
+  background: #282828;
+  font-family: 'Trebuchet MS';
+}
+
+.pages-wrapper h1, .pages-wrapper ul, .pages-wrapper h2, .pages-wrapper p {
+  padding: 0px;
+  margin: 0px;
+  clear: both;
+}
+
+.pages-wrapper h2 {
+  color: #eba904;
+  margin: 20px 0 20px 0 !important; 
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.pages-wrapper {
+  max-width: 940px;
+  clear: both;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.pages-wrapper #logo {
+  position: relative;
+  top: 24px;
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.pages-wrapper a {
+  outline-style: none;
+  text-decoration: none;
+  color: #fff;
+  line-height: 20px;
+  display: block;
+}
+
+.pages-wrapper a[href="#"] {
+  opacity: 0.5;
+}
+
+.pages-wrapper a:hover {
+  color: #f58628;
+}
+
+.pages-wrapper ul {
+  list-style: none;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.pages-wrapper li {
+  color: #fff;
+  vertical-align: top;
+  text-align: center;
+  display: inline-block;
+  margin-right: 20px;
+  width: auto;
+  *display: inline;
+  *zoom: 1;
+  *width: 280px;
+}
+
+.pages-wrapper li p {
+  width: 150px;
+  line-height: 16px;
+  margin: 15px auto 0 auto;
+}
+
+.pages-wrapper ul img {
+  border-radius: 5px;
+  box-shadow: 0 0 12px 0px #fff;
+  margin: 0 0 7px;
+  border: 0px;
+  margin: 20px 20px 0;
+  display: block;
+}
+
+.pages-wrapper ul img:hover {
+  -moz-transition: all 0.1s linear 0s;
+  border-radius: 5px;
+  box-shadow: 0 0 20px 1px #fff;
+  -moz-border-radius: 5px;
+  -moz-box-shadow: 0 0 20px 1px #fff;
+}

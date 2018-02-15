@@ -1,0 +1,9 @@
+name =  Funnel captcha
+description = "funnel captcha"
+core = 7.x
+version = "7.x-1.0"
+project = funnel captcha
+package = Spam control
+dependencies[] = captcha
+configure = admin/settings/funnel_captcha
+

@@ -1,0 +1,293 @@
+.site-header {
+  position: relative;
+
+  a {
+    font-family: $niks-normal;
+    text-decoration: none;
+  }
+
+  .header-top {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #097FD4;
+    z-index: 1000;
+    display: none;
+
+    .menu {
+
+      ul {
+        @include clearfix();
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        width: 100%;
+        list-style: none;
+
+        &:hover {
+          padding-right: 0;
+        }
+      }
+
+      a {
+        padding: 7px 0;
+        display: block;
+        color: #fff;
+        position: relative;
+        font-size: 21px;
+        background: #097FD4;
+        text-align: center;
+
+      }
+    }
+  }
+
+  .header-bottom {
+    background: #0b8cea;
+    padding: 22px 15px;
+    height: 73px;
+    overflow: hidden;
+    @include transition(all .3s);
+
+    .site-container {
+      min-height: 100%;
+    }
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .hamburger-wrapper {
+      height: 40px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    &.active {
+      height: 350px;
+
+      .hamburger-wrapper {
+        border-bottom: 2px solid #fff;
+      }
+
+      .hamburger {
+        background: none;
+
+        &:before {
+          top: 0;
+          @include border-radius(4px);
+          @include transform(rotate(45deg));
+        }
+
+        &:after {
+          bottom: 0;
+          @include border-radius(4px);
+          @include transform(rotate(-45deg));
+        }
+      }
+    }
+  }
+
+  .hamburger {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    display: block;
+    width: 30px;
+    height: 3px;
+    background: #fff;
+    @include border-radius(8px);
+    @include transition(all .3s);
+    margin-top: -8px;
+
+    &:before {
+      @include pseudo-block($top: -9px, $left: 0, $right: 0);
+      height: 3px;
+      background: #fff;
+      @include border-radius(8px);
+      @include transition(all .3s);
+    }
+
+    &:after {
+      @include pseudo-block($bottom: -9px, $left: 0, $right: 0);
+      height: 3px;
+      background: #fff;
+      @include border-radius(8px);
+      @include transition(all .3s);
+    }
+  }
+
+  .site-container {
+    padding-top: 70px;
+  }
+
+  .logo {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    padding-bottom: 40px;
+    @include transition(all .3s);
+    z-index: 100;
+    width: 130px;
+
+    &:hover {
+      @include opacity(0.7);
+    }
+
+    img {
+      width: 100%;
+      display: block;
+    }
+  }
+
+  .nav {
+    padding-top: 0;
+
+    & > .menu > li:last-child {
+      padding-bottom: 85px;
+      margin-bottom: 0;
+    }
+
+    ul {
+      @include clearfix();
+      margin: 0;
+      padding: 0;
+
+      li {
+        padding: 0;
+        display: block;
+        position: relative;
+        font-size: 21px;
+        margin: 0 0 11px 0;
+        text-align: center;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &.expanded > a {
+
+          &.opened:after {
+            @include transform(rotate(180deg));
+          }
+
+          &:after {
+            @include pseudo-block($top: 12px, $right: -14px);
+            @include oneline-sprite-box($icons, select-arr-white);
+            @include transition(all .3s);
+          }
+        }
+
+        &.active a, &.active-trail a {
+
+          &:before {
+            width: 100%;
+
+            @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+              right: 0;
+            }
+          }
+        }
+
+        .menu {
+          padding: 15px;
+          position: relative;
+          left: 0;
+          right: 0;
+          display: none;
+          min-width: 210px;
+          background: #178fe5;
+          z-index: 500;
+          @include box-shadow(0 0 10px -3px #000);
+
+          li {
+            display: block;
+            float: none;
+            margin-left: 0;
+            margin-bottom: 15px;
+
+            a:before {
+              width: 0%;
+            }
+
+            .menu {
+              background: #1378c0;
+            }
+          }
+        }
+      }
+    }
+
+    a {
+      position: relative;
+
+      &:before {
+        @include pseudo-block($left: 0, $bottom: -5px);
+        border-bottom: 2px solid #fff;
+        width: 0;
+        @include transition(width .3s);
+
+        @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+          width: auto !important;
+        }
+      }
+
+      &:hover:before {
+        width: 100%;
+
+        .mobile-device & {
+          display: none;
+        }
+
+        @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+          right: 0;
+        }
+      }
+    }
+  }
+
+  .login-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    margin-left: -128px;
+    @include transform(scale(0.7));
+
+    &:before {
+      @include pseudo-block($top: 50%, $left: 0);
+      border-left: 1px solid #fff;
+      opacity: .4;
+      height: 60px;
+      margin-top: -30px;
+    }
+
+    .btn {
+      font-size: 32px;
+      display: inline-block;
+      padding: 20px 24px 20px 85px;
+      background: #323232;
+      font-family: $niks-bold-italic;
+      color: #f6a704;
+      @include border-radius(5px);
+      position: relative;
+      @include transition(opacity .3s);
+
+      &:hover {
+        opacity: .8;
+      }
+
+      &:before {
+        @include oneline-sprite-box($icons, icon-login-m);
+        @include pseudo-block($left: 7px, $top: 50%);
+        margin-top: -26px;
+      }
+    }
+  }
+}

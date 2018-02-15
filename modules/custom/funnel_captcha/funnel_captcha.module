@@ -1,0 +1,501 @@
+<?php
+/**
+ * @file
+ * funnel_captcha.module
+ */
+
+define('FUNNEL_CAPTCHA_ALLOWED_CHARACTERS', 'aAbBCdEeFfGHhijKLMmNPQRrSTtWXYZ23456789');
+
+// Setup status flags.
+define('FUNNEL_CAPTCHA_ERROR_NO_GDLIB', 1);
+define('FUNNEL_CAPTCHA_ERROR_NO_TTF_SUPPORT', 2);
+define('FUNNEL_CAPTCHA_ERROR_TTF_FILE_READ_PROBLEM', 4);
+
+define('FUNNEL_CAPTCHA_FILE_FORMAT_JPG', 1);
+define('FUNNEL_CAPTCHA_FILE_FORMAT_PNG', 2);
+define('FUNNEL_CAPTCHA_FILE_FORMAT_TRANSPARENT_PNG', 3);
+
+/**
+ * Implements hook_init().
+ */
+function funnel_captcha_init() {
+  drupal_add_css(drupal_get_path('module', 'funnel_captcha') . '/css/funnel_captcha.css');
+}
+
+/**
+ * Implements hook_help().
+ */
+function funnel_captcha_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#funnel_captcha':
+      $output = '<p>' . t('This module provide additional security to the Captcha module.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function funnel_captcha_menu() {
+  $items = array();
+
+  $items['getcaptchavalue'] = array(
+    'title' => "new",
+    'access callback' => TRUE,
+    'page callback' => 'funnel_captcha_get_ajaxip',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['funnelcaptcha'] = array(
+    'title' => "",
+    'access callback' => TRUE,
+    'page callback' => 'funnel_captcha_security_image',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/settings/funnel_captcha'] = array(
+    'title' => 'Funnel Captcha',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('funnel_captcha_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['funnel/captcha/refresh'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'funnel_captcha_refresh_ajax_refresh',
+    'page arguments' => array(2),
+    'access callback' => TRUE
+  );
+
+  return $items;
+}
+
+function funnel_captcha_settings() {
+  $form['funnel_captcha'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Funnel captcha settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+
+  $form['funnel_captcha']['funnel_captcha_font'] = array(
+    '#type' => 'select',
+    '#title' => t('Font'),
+    '#options' => drupal_map_assoc(array(
+      "monofont" => "monofont",
+      "tesox" => "tesox",
+      "Tuffy" => "Tuffy",
+      "Tuffy_Bold" => "Tuffy_Bold"
+    )),
+    '#default_value' => variable_get('funnel_captcha_font', "monofont"),
+    '#description' => t('Font of image code.'),
+  );
+
+  // Font size.
+  $form['funnel_captcha']['funnel_captcha_font_size'] = array(
+    '#type' => 'select',
+    '#title' => t('Font size'),
+    '#options' => array(
+      9 => '9 pt - ' . t('tiny'),
+      12 => '12 pt - ' . t('small'),
+      18 => '18 pt',
+      24 => '24 pt - ' . t('normal'),
+      30 => '30 pt',
+      36 => '36 pt - ' . t('large'),
+      48 => '48 pt',
+      64 => '64 pt - ' . t('extra large'),
+    ),
+    '#default_value' => (int) variable_get('funnel_captcha_font_size', 30),
+    '#description' => t('The font size influences the size of the image. Note that larger values make the image generation more CPU intensive.'),
+  );
+
+// Character spacing (available for both the TrueType fonts and the builtin font.
+$form['funnel_captcha']['funnel_captcha_character_spacing'] = array(
+  '#type' => 'select',
+  '#title' => t('Character spacing'),
+  '#description' => t('Define the average spacing between characters. Note that larger values make the image generation more CPU intensive.'),
+  '#default_value' => variable_get('funnel_captcha_character_spacing', '1.2'),
+  '#options' => array(
+    '0.75' => t('tight'),
+    '1' => t('normal'),
+    '1.2' => t('wide'),
+    '1.5' => t('extra wide'),
+  ),
+);
+
+  return system_settings_form($form);
+}
+
+
+
+/**
+ * Page ajax callback
+ */
+function funnel_captcha_get_ajaxip() {
+  if (isset($_SERVER['REMOTE_ADDR'])) {
+    $data = $_SERVER['REMOTE_ADDR'];
+    drupal_json_output(
+      array(
+        'status' => TRUE,
+        'data' => $data,
+      ));
+    exit();
+  }
+  else {
+    drupal_not_found();
+  }
+}
+
+/**
+ * Helper function for checking the setup of the Image CAPTCHA.
+ *
+ * The image CAPTCHA requires at least the GD PHP library.
+ * Support for TTF is recommended and the enabled
+ * font files should be readable.
+ * This functions checks these things.
+ *
+ * @param $check_fonts whether or not the enabled fonts should be checked.
+ *
+ * @return status code: bitwise 'OR' of status flags like
+ *   IMAGE_CAPTCHA_ERROR_NO_GDLIB, IMAGE_CAPTCHA_ERROR_NO_TTF_SUPPORT,
+ *   IMAGE_CAPTCHA_ERROR_TTF_FILE_READ_PROBLEM.
+ */
+function _funnel_image_captcha_check_setup($check_fonts = TRUE) {
+  // Start clean.
+  $status = 0;
+  // Check if we can use the GD library.
+  // We need at least the imagepng function (for font previews on the settings page).
+  // Note that the imagejpg function is optionally also used, but not required.
+  if (!function_exists('imagepng')) {
+    $status = $status | FUNNEL_CAPTCHA_ERROR_NO_GDLIB;
+  }
+  if (!function_exists('imagettftext')) {
+    $status = $status | FUNNEL_CAPTCHA_ERROR_NO_TTF_SUPPORT;
+  }
+  return $status;
+}
+
+/**
+ * Helper function for splitting an utf8 string correctly in characters.
+ * Assumes the given utf8 string is well formed.
+ * See http://en.wikipedia.org/wiki/Utf8 for more info
+ */
+function _funnel_image_captcha_utf8_split($str) {
+  $characters = array();
+  $len = strlen($str);
+  for ($i = 0; $i < $len;) {
+    $chr = ord($str[$i]);
+    if (($chr & 0x80) == 0x00) { // one byte character (0zzzzzzz)
+      $width = 1;
+    }
+    else {
+      if (($chr & 0xE0) == 0xC0) { // two byte character (first byte: 110yyyyy)
+        $width = 2;
+      }
+      elseif (($chr & 0xF0) == 0xE0) { // three byte character (first byte: 1110xxxx)
+        $width = 3;
+      }
+      elseif (($chr & 0xF8) == 0xF0) { // four byte character (first byte: 11110www)
+        $width = 4;
+      }
+      else {
+        watchdog('CAPTCHA', 'Encountered an illegal byte while splitting an utf8 string in characters.', array(), WATCHDOG_ERROR);
+        return $characters;
+      }
+    }
+    $characters[] = substr($str, $i, $width);
+    $i += $width;
+  }
+  return $characters;
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function funnel_captcha_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
+  switch ($op) {
+    case 'list':
+      // Only offer the image CAPTCHA if it is possible to generate an image on this setup.
+      if (!(_funnel_image_captcha_check_setup() & FUNNEL_CAPTCHA_ERROR_NO_GDLIB)) {
+        return array('Funnel');
+      }
+      else {
+        return array();
+      }
+      break;
+    case 'generate':
+      if ($captcha_type == 'Funnel') {
+        // In maintenance mode, the image CAPTCHA does not work because the request
+        // for the image itself won't succeed (only ?q=user is permitted for
+        // unauthenticated users). We fall back to the Math CAPTCHA in that case.
+        global $user;
+        if (variable_get('maintenance_mode', 0) && $user->uid == 0) {
+          return captcha_captcha('generate', 'Math');
+        }
+        // generate a CAPTCHA code
+        $allowed_chars = _funnel_image_captcha_utf8_split(variable_get('funnel_captcha_image_allowed_chars', FUNNEL_CAPTCHA_ALLOWED_CHARACTERS));
+        $code_length = (int) variable_get('funnel_image_captcha_code_length', 5);
+        $code = '';
+        for ($i = 0; $i < $code_length; $i++) {
+          $code .= $allowed_chars[array_rand($allowed_chars)];
+        }
+
+        // build the result to return
+        $result = array();
+        $result['solution'] = $code;
+        $options = array(
+          'query' => array(
+            'sid' => $captcha_sid,
+            'ts' => REQUEST_TIME,
+          ),
+        );
+        $img_src = check_url(url("funnelcaptcha", $options));
+        list($width, $height) = _funnel_captcha_image_size($code);
+        $result['form']['captcha_image'] = array(
+          '#type' => 'markup',
+          '#markup' => '<img src="' . $img_src
+            . '" width="' . $width . '" height="' . $height
+            . '" alt="' . t('Funnel CAPTCHA') . '" title="' . t('Funnel CAPTCHA') . '" />',
+          '#weight' => -2,
+        );
+        $result['form']['captcha_response'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Enter the characters shown in the image.'),
+          '#weight' => 0,
+          '#required' => TRUE,
+          '#size' => 15,
+        );
+
+        // Handle the case insensitive validation option combined with ignoring spaces.
+        switch (variable_get('captcha_default_validation', CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE)) {
+          case CAPTCHA_DEFAULT_VALIDATION_CASE_SENSITIVE:
+            $result['captcha_validate'] = 'captcha_validate_ignore_spaces';
+            break;
+          case CAPTCHA_DEFAULT_VALIDATION_CASE_INSENSITIVE:
+            $result['captcha_validate'] = 'captcha_validate_case_insensitive_ignore_spaces';
+            break;
+        }
+
+        return $result;
+      }
+  }
+}
+
+function funnel_captcha_security_image($width = '120', $height = '40', $characters = '6', $code = '') {
+
+  $font_name = variable_get('funnel_captcha_font', "monofont");
+  $font = drupal_get_path('module', 'funnel_captcha') . '/fonts/' . $font_name . '.ttf';
+  if (!isset($_GET['sid'])) {
+    exit();
+  }
+  $captcha_sid = $_GET['sid'];
+
+  $code = db_query("SELECT solution FROM {captcha_sessions} WHERE csid = :csid",
+    array(':csid' => $captcha_sid)
+  )->fetchField();
+
+  /* font size will be 75% of the image height */
+  if ($font_name == "tesox") {
+    $ratio = 0.5;
+  }
+  else {
+    $ratio = 0.75;
+  }
+  $font_size = $height * $ratio;
+  $image = @imagecreate($width, $height) or die('Cannot initialize new GD image stream');
+  /* set the colours */
+  $background_color = imagecolorallocate($image, 255, 255, 255);
+  $text_color = imagecolorallocate($image, 20, 40, 100);
+  $noise_color = imagecolorallocate($image, 100, 120, 180);
+  /* generate random dots in background */
+  for ($i = 0; $i < (($width * $height) / 3); $i++) {
+    imagefilledellipse($image, mt_rand(0, $width), mt_rand(0, $height), 1, 1, $noise_color);
+  }
+  /* generate random lines in background */
+  for ($i = 0; $i < ($width * $height) / 150; $i++) {
+    imageline($image, mt_rand(0, $width), mt_rand(0, $height), mt_rand(0, $width), mt_rand(0, $height), $noise_color);
+  }
+
+  /* create textbox and add text */
+  $textbox = imagettfbbox($font_size, 0, $font, $code) or die('Error in imagettfbbox function');
+  $x = ($width - $textbox[4]) / 2;
+  $y = ($height - $textbox[5]) / 2;
+  imagettftext($image, $font_size, 0, $x, $y, $text_color, $font, $code) or die('Error in imagettftext function');
+  /* output captcha image to browser */
+  header('Content-Type: image/jpeg');
+  imagejpeg($image);
+  imagedestroy($image);
+}
+
+
+/**
+ * Helper function for calculating image height and width
+ * based on given code and current font/spacing settings.
+ *
+ * @return array($width, $heigh)
+ */
+function _funnel_captcha_image_size($code) {
+  // Get settings
+  $font_size = (int) variable_get('funnel_captcha_font_size', 30);
+  $character_spacing = (float) variable_get('funnel_captcha_character_spacing', '1.2');
+  $characters = _funnel_image_captcha_utf8_split($code);
+  $character_quantity = count($characters);
+
+  // Calculate height and width
+  $width = $character_spacing * $font_size * $character_quantity;
+  $height = 2 * $font_size;
+
+  return array($width, $height);
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function funnel_captcha_element_info_alter(&$type) {
+  if (isset($type['captcha'])) {
+    $type['captcha']['#process'][] = 'funnel_captcha_element_process';
+  }
+}
+
+function funnel_captcha_element_process($element, &$form_state, $complete_form) {
+
+  if ($element['#captcha_type'] == 'funnel_captcha/Funnel'
+    && !empty($element['#element_validate'][0])
+    && $element['#element_validate'][0] == 'captcha_validate'
+  ) {
+
+    $form_id = $element['#captcha_info']['form_id'];
+
+    $element['left_param'] = array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#attributes' => array('autocomplete' => 'off'),
+      '#attributes' => array('id' => 'left_param', 'style' =>array('display: none;')),
+    );
+
+    $element['human_token'] = array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#attributes' => array('autocomplete' => 'off'),
+      '#attributes' => array('id' => 'human_token', 'style' =>array('display: none;')),
+    );
+
+    $element['#attached']['js'][] = drupal_get_path('module', 'funnel_captcha') . '/js/funnel_captcha.js';
+    $settings = array($complete_form['#id'] => md5($element['captcha_token']['#value']));
+
+    $element['#attached']['js'][] = array(
+      'data' => array('funnel_captcha' => $settings),
+      'type' => 'setting',
+    );
+
+    $element['captcha_widgets']['captcha_refresh'] = array(
+      '#markup' => theme('funnel_captcha_refresh_link', array('url' => 'funnel/captcha/refresh/' . $form_id)),
+      '#weight' => -1,
+    );
+    //change element validation
+    $element['#element_validate'][0] = 'funnel_captcha_validate';
+
+  }
+  return $element;
+}
+
+/**
+ * Captha element validation function.
+ * @param $element
+ * @param $form_state
+ */
+function funnel_captcha_validate($element, &$form_state) {
+  $val1 = md5($form_state['input']['captcha_token']);
+
+  if (isset($form_state["input"]["captcha_sid"])) {
+    if (isset($_POST["left_param"]) && isset($_POST["human_token"])) {
+      if ($_POST["left_param"] != "" || $_POST["human_token"] != $val1) {
+        form_set_error('captcha_point_form_id', t('Illegal captcha data'));
+        return;
+      }
+    }
+  }
+
+  captcha_validate($element, $form_state);
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function funnel_captcha_theme() {
+  return array(
+    'funnel_captcha_refresh_link' => array(
+      'variables' => array('url' => NULL)
+    )
+  );
+}
+
+/**
+ * Image captcha refresh ajax handler.
+ * @param $form_id For which form need refresh captcha image
+ * @return Data in json format
+ */
+function funnel_captcha_refresh_ajax_refresh($form_id) {
+  $GLOBALS['conf']['cache'] = FALSE;
+  $result = array(
+    'status' => 0,
+    'message' => ''
+  );
+  try {
+    module_load_include('inc', 'captcha');
+    $captcha_sid = _captcha_generate_captcha_session($form_id);
+    $captcha_token = md5(mt_rand());
+
+    $allowed_chars = _funnel_image_captcha_utf8_split(variable_get('funnel_captcha_image_allowed_chars', FUNNEL_CAPTCHA_ALLOWED_CHARACTERS));
+    $code_length = (int) variable_get('funnel_image_captcha_code_length', 5);
+    $code = '';
+    for ($i = 0; $i < $code_length; $i++) {
+      $code .= $allowed_chars[array_rand($allowed_chars)];
+    }
+
+    db_update('captcha_sessions')
+      ->fields(array('token' => $captcha_token, 'solution' => $code))
+      ->condition('csid', $captcha_sid)
+      ->execute();
+
+    $query = array(
+      'query' => array(
+        'sid' => $captcha_sid,
+        'ts' => REQUEST_TIME,
+      )
+    );
+
+    $result['data'] = array(
+      'url' => url("funnelcaptcha", $query),
+      'token' => $captcha_token,
+      'human_token' => md5($captcha_token),
+      'sid' => $captcha_sid
+    );
+    $result['status'] = 1;
+  }
+  catch (Exception $e) {
+    if ($message = $e->getMessage()) {
+      $result['message'] = $message;
+    }
+    else {
+      $result['message'] = t('Error has occured. Please contact the site administrator.');
+    }
+  }
+  drupal_json_output($result);
+}
+
+/**
+ * Returns a link for refreshing captcha image.
+ *
+ * @ingroup themeable
+ */
+function theme_funnel_captcha_refresh_link($variables) {
+  $output = '<div class="reload-captcha-wrapper">';
+  $output .= l(t('Generate a new captcha'), $variables['url'], array('attributes' => array('class' => array('funnel-reload-captcha'))));
+  $output .= '</div>';
+  return $output;
+}

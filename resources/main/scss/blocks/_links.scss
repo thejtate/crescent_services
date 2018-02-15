@@ -1,0 +1,74 @@
+.b-links {
+  margin-bottom: 125px;
+
+  & > ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      border-bottom: 2px solid #a7a7a7;
+      list-style: none;
+      font-size: 24px;
+      position: relative;
+      font-family: $museo-300;
+
+      &:before {
+        @include transition(opacity .3s);
+        opacity: 0;
+        width: 970px;
+        height: 185px;
+        z-index: -1;
+        @include pseudo-block($bottom: 0, $left: 0, $right: 0);
+        background: image-url('bg/gradient.png') 50% 100% no-repeat;
+      }
+
+      &:hover {
+
+        &:before {
+          opacity: 1;
+        }
+
+        a {
+          color: #f6a704;
+
+          &:before {
+            left: -60px;
+            opacity: 1;
+          }
+        }
+      }
+
+      a {
+        min-height: 186px;
+        padding-top: 55px;
+        padding-bottom: 50px;
+        @include clearfix();
+        padding-left: 448px;
+        display: block;
+        color: #7d7d7d;
+        @include transition(color .3s);
+        text-decoration: none;
+
+        &:before {
+          opacity: 0;
+          @include transition(opacity .3s, left .3s);
+          @include pseudo-block($left: -70px, $top: 50%);
+          margin-top: -27px;
+          border-left: 48px solid #f6a704;
+          border-top: 27px solid transparent;
+          border-bottom: 27px solid transparent;
+        }
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .logo {
+        position: absolute;
+        left: 0;
+        top: 55px;
+      }
+    }
+  }
+}

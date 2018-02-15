@@ -1,0 +1,266 @@
+<?php
+
+/**
+ * @file
+ * Blog module
+ */
+
+
+/**
+ * Implements hook_init().
+ */
+function fblog_init() {
+  $path = drupal_get_path("module", "fblog");
+  drupal_add_css($path . "/css/fblog.css");
+  drupal_add_js($path . "/js/fblog.js");
+}
+
+/**
+ * Implements hook_permission().
+ */
+function fblog_permission() {
+  $return = array();
+
+  $return['fblog_administer'] = array(
+    'title' => t('Administer Blog'),
+    'description' => t('Allow to the user to manage blog.'),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function fblog_menu() {
+  // This is the minimum information you can provide for a menu item.
+  $items['admin/config/fblog'] = array(
+    'title' => 'Blog',
+    'description' => 'Adjust Blog options.',
+    'position' => 'right',
+    'weight' => -5,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('administer site configuration'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+  $items['admin/config/fblog/settings'] = array(
+    'title' => 'Settings',
+    'description' => 'Blog settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('fblog_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'fblog.admin.inc',
+  );
+
+  menu_cache_clear('manager_menu');
+  return $items;
+}
+
+
+/**
+ * Implements hook_views_api().
+ */
+function fblog_views_api() {
+  return array("version" => "3.0");
+}
+
+/**
+ * Implements hook_node_info().
+ */
+function fblog_node_info() {
+  $items = array(
+    'fblog_post' => array(
+      'name' => t('Blog post'),
+      'base' => 'node_content',
+      'description' => '',
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function fblog_image_default_styles() {
+  $styles = array();
+
+  // Exported image style: fblog_post_image.
+  $styles['fblog_post_image'] = array(
+    'name' => 'fblog_post_image',
+    'effects' => array(
+      3 => array(
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
+        'module' => 'image',
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => '301',
+          'height' => '219',
+        ),
+        'weight' => '1',
+      ),
+    ),
+  );
+
+  // Exported image style: fblog_teaser.
+  $styles['fblog_teaser'] = array(
+    'name' => 'fblog_teaser',
+    'effects' => array(
+      1 => array(
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
+        'module' => 'image',
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => '300',
+          'height' => '200',
+        ),
+        'weight' => '1',
+      ),
+    ),
+  );
+
+  return $styles;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function fblog_theme() {
+  $path = drupal_get_path('module', 'fblog');
+  $hooks = array();
+  $hooks['fblog_post_by_month'] = array(
+    'path' => $path . '/templates/blog',
+    'variables' => array('archive' => NULL, 'blog_base_path' => 'blog'),
+    'template' => 'fblog_post_by_month',
+  );
+
+  return $hooks;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function fblog_block_info() {
+  $blocks = array();
+  $blocks['fblog_archive'] = array('info' => t('Blog: Archive'));
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function fblog_block_view($delta) {
+  $block = array();
+  switch ($delta) {
+    case 'fblog_archive':
+      $block = fblog_get_blog_archive();
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Get archive of blog posts.
+ * @return string
+ *   html
+ */
+function fblog_get_blog_archive() {
+  $show_titles = variable_get('fblog_settings_nodes', 0);
+
+  $query = db_select('field_data_field_fblog_date', 'fdate');
+
+  $query->addExpression("DATE_FORMAT(field_fblog_date_value, '%M')", 'month');
+  $query->addExpression("DATE_FORMAT(field_fblog_date_value, '%m')", 'month_digits');
+  $query->addExpression("DATE_FORMAT(field_fblog_date_value, '%Y')", 'year');
+  $query->addExpression("count(entity_id)", 'count');
+
+  if ($show_titles) {
+    $query->addExpression("group_concat(entity_id SEPARATOR '|')", "nids");
+  }
+
+  $query->leftJoin('node', 'n', 'n.vid = fdate.revision_id');
+  $query->condition('n.status', 1);
+  $query->condition('n.type', 'fblog_post');
+
+  $query->groupBy('year');
+  $query->groupBy('month_digits');
+  $query->orderBy('year', 'desc');
+  $query->orderBy('month_digits', 'desc');
+
+  drupal_alter('fblog_get_archive_query', $query);
+
+  $rows = $query->execute()->fetchAll();
+
+  $year_count = array();
+  foreach ($rows as $row) {
+    $year_count[$row->year] = (isset($year_count[$row->year])) ? $year_count[$row->year] + $row->count : $row->count;
+  }
+
+  $archive_data = array();
+  foreach ($rows as $row) {
+    $row->year_count = (isset($year_count[$row->year])) ? $year_count[$row->year] : 0;
+    $archive_data[$row->year][$row->month] = $row;
+
+    if ($show_titles) {
+      $nids = explode("|", $row->nids);
+      $subquery = db_select('node', 'n');
+      $subquery->fields('n', array('nid', 'title'));
+      $subquery->condition('n.nid', $nids, 'IN');
+      $subquery->orderBy('created', "DESC");
+      $limit = variable_get('fblog_settings_count_nodes', 10);
+      if (!empty($limit)) {
+        $subquery->range(0, $limit);
+      }
+      $archive_data[$row->year][$row->month]->nodes = $subquery->execute()
+        ->fetchAllKeyed(0);
+    }
+  }
+
+  drupal_alter('fblog_get_archive_data', $archive_data);
+
+  $block['subject'] = t('Browse by month/Year');
+  $block['content'] = theme('fblog_post_by_month', array(
+    'archive' => $archive_data,
+    'blog_base_path' => 'blog'
+  ));
+  return $block;
+}
+
+/**
+ * Implements hook_fblog_get_archive_query().
+ */
+function fblog_fblog_get_archive_query_alter(&$query) {
+
+}
+
+/**
+ * Implements hook_fblog_get_archive_data().
+ */
+function fblog_fblog_get_archive_data_alter(&$archive_data) {
+
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function fblog_form_fblog_post_node_form_alter(&$form, &$form_state, $form_id) {
+  $show_categories = variable_get('fblog_settings_category_active', 0);
+  if (empty($show_categories)){
+    $form['field_fblog_category']['#access'] = FALSE;
+  }
+}

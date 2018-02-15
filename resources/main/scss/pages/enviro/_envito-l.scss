@@ -1,0 +1,185 @@
+.page-enviro {
+
+  .block-system .quicktabs-wrapper .quicktabs-tabs li.active:before {
+    bottom: 0;
+  }
+
+  .block-system {
+
+    h5 {
+      margin: 60px 0 50px 0;
+      font-size: 36px;
+      text-transform: none;
+      padding-bottom: 50px;
+    }
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .list-desc {
+    font-size: 14px;
+    color: #6d6d6d;
+    float: right;
+    width: 420px;
+  }
+
+  .quicktabs-wrapper {
+
+    .quicktabs-tabs {
+
+      li {
+
+        &:nth-child(1) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-1);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, enviro-icon-1-active);
+          }
+        }
+
+        &:nth-child(2) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-2);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, enviro-icon-2-active);
+          }
+        }
+
+        &:nth-child(3) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-3);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, enviro-icon-3-active);
+          }
+        }
+
+        &:nth-child(4) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-4);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, enviro-icon-4-active);
+          }
+        }
+
+        &:nth-child(5) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, enviro-icon-5);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, enviro-icon-5-active);
+          }
+        }
+      }
+    }
+  }
+
+  .right-part {
+    text-transform: none;
+    position: absolute;
+    right: 0;
+    top: 22px;
+  }
+
+  .quicktabs_main {
+
+    ul {
+      margin: 0 0 40px;
+      padding: 0;
+      font-size: 18px;
+
+      li {
+        list-style: none;
+        text-align: center;
+        margin-bottom: 8px;
+
+        span {
+          position: relative;
+          padding-left: 25px;
+        }
+      }
+    }
+
+    .img {
+      text-align: center;
+    }
+  }
+
+  .list-wrapper {
+
+    .img {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 120px;
+    }
+
+    .list {
+      display: inline-block;
+      vertical-align: middle;
+      color: #1c1f22;
+
+      ul {
+        font-size: 24px;
+
+        & > li {
+          text-align: left;
+          margin-bottom: 13px;
+          position: relative;
+
+          &:before {
+            @include pseudo-block($top: 0, $left: -30px);
+            border-top: 16px solid transparent;
+            border-left: 23px solid #f6a704;
+            border-bottom: 16px solid transparent;
+          }
+
+          ul {
+            margin: 15px 0;
+
+            li {
+              text-align: left;
+              position: relative;
+
+              &:before {
+                @include pseudo-block($top: 0, $left: -18px);
+                border-top: 10px solid transparent;
+                border-left: 13px solid #bfcbd6;
+                border-bottom: 10px solid transparent;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

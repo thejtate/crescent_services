@@ -1,0 +1,136 @@
+.page-careers {
+
+  .content-wrapper {
+    padding: 0 0 50px 0;
+  }
+
+  .btn-wrapp {
+    text-align: center;
+
+    .btn {
+      padding: 17px 40px 17px 40px;
+    }
+  }
+
+  h5 {
+    margin: 60px 0 0 0;
+    border-bottom: 1px solid #c0c0c0;
+    padding-bottom: 40px;
+    font-size: 36px;
+    font-family: $museoslab-100;
+    text-align: center;
+    color: #353535;
+    text-transform: uppercase;
+  }
+
+  .cols-three {
+    @include clearfix();
+
+    .col {
+      width: 33.3333%;
+      text-align: center;
+      padding: 75px 0 60px 0;
+      color: #7d7d7d;
+      font-family: $museo-300;
+      float: left;
+      border-left: 1px solid #cccccc;
+
+      h4 {
+        color: #7d7d7d;
+      }
+
+      &:first-child {
+        border-left: none;
+      }
+
+      h4 {
+        margin: 0;
+      }
+    }
+  }
+
+  .careers-list {
+    margin: 0;
+    padding: 0 0 0 50px;
+
+    li {
+      list-style: none;
+      position: relative;
+      margin-bottom: 20px;
+
+      &:before {
+        @include pseudo-block($top: 0, $left: -35px);
+        @include oneline-sprite-box($icons, foreman-in-icons);
+      }
+    }
+  }
+
+  .text{
+    width: 740px;
+    margin: 0 auto;
+    padding: 40px 0 0 0;
+  }
+
+  .form {
+    padding: 30px 178px 0 178px;
+  }
+
+  .quicktabs-wrapper {
+
+    .quicktabs-tabs {
+      padding: 120px 90px 0 90px;
+
+      a {
+        position: relative;
+      }
+
+
+      .quicktabs-tabs-item-1 {
+
+        a {
+
+          &:after {
+            @include pseudo-block($top: -85px, $left: 50%);
+            @include oneline-sprite-box($icons, careers-tab-1);
+            margin-left: -33px;
+          }
+        }
+
+        &.active a:after {
+          @include oneline-sprite-box($icons, careers-tab-1-a);
+        }
+
+      }
+
+      .quicktabs-tabs-item-2 {
+
+        a {
+          &:after {
+            @include pseudo-block($top: -85px, $left: 50%);
+            @include oneline-sprite-box($icons, careers-tab-2);
+            margin-left: -33px;
+          }
+        }
+
+        &.active a:after {
+          @include oneline-sprite-box($icons, careers-tab-2-a);
+        }
+      }
+
+      .quicktabs-tabs-item-3 {
+
+        a {
+          &:after {
+            @include pseudo-block($top: -85px, $left: 50%);
+            @include oneline-sprite-box($icons, careers-tab-3);
+            margin-left: -45px;
+          }
+        }
+
+        &.active a:after {
+          @include oneline-sprite-box($icons, careers-tab-3-a);
+        }
+      }
+    }
+  }
+}

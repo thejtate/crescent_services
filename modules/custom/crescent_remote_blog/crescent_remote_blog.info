@@ -1,0 +1,17 @@
+name = Crescent remote blog
+description = Provides an remote blog.
+core = 7.x
+dependencies[] = remote_entity
+dependencies[] = elysia_cron
+
+
+files[] = includes/RemoteEntityAPIBlogController.php
+files[] = includes/clients_connection_crescent_remote_blog_rest.php
+files[] = includes/CrescentRemoteEntityRestRemoteSelectQuery.php
+files[] = includes/CrescentRemoteEntityPost.php
+files[] = includes/CrescentRemoteBlogConnectionTestRetrieveRaw.php
+files[] = includes/crescent_remote_blog.entity.inc
+files[] = includes/crescent_remote_blog.core.inc
+files[] = includes/crescent_remote_blog.clients.inc
+files[] = includes/crescent_remote_blog.block.inc
+files[] = includes/crescent_remote_blog.views.inc

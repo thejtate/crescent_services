@@ -1,0 +1,108 @@
+.page-services {
+
+  .text-slider {
+
+    .left-part {
+      width: 420px;
+      float: left;
+      padding-right: 30px;
+    }
+
+    .right-part {
+      display: block;
+    }
+  }
+
+  .left-part {
+    width: 100%;
+  }
+
+  .right-part {
+    width: 540px;
+    float: right;
+    display: none;
+
+    .flexslider .slides > li {
+      max-height: 320px;
+    }
+  }
+
+  .quicktabs-wrapper {
+
+    .quicktabs-tabs {
+
+      li {
+
+        //        &:nth-child(1) {
+        //
+        //          a {
+        //
+        //            &:before {
+        //              @include oneline-sprite-box($icons, icon-1);
+        //            }
+        //          }
+        //
+        //          &.active a:before {
+        //            @include oneline-sprite($icons, icon-1-hover);
+        //          }
+        //        }
+
+        &:nth-child(1) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-2);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-2-hover);
+          }
+        }
+
+        &:nth-child(2) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-3);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-3-hover);
+          }
+        }
+
+        &:nth-child(3) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-4);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-4-hover);
+          }
+        }
+
+        &:nth-child(4) {
+
+          a {
+
+            &:before {
+              @include oneline-sprite-box($icons, icon-5);
+            }
+          }
+
+          &.active a:before {
+            @include oneline-sprite($icons, icon-5-hover);
+          }
+        }
+      }
+    }
+  }
+}
